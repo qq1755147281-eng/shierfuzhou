@@ -762,13 +762,13 @@
   .battle{width:min(95vw,560px);display:flex;flex-direction:column;gap:6px;margin:auto;position:relative;padding-top:4px}
   /* ===== 战斗页 · 背景装饰：八卦 + 十二生肖圆环 ===== */
   .battle-deco{position:absolute;inset:-80px -30px;display:flex;align-items:center;justify-content:center;
-    pointer-events:none;z-index:0;opacity:.3;mix-blend-mode:screen}
+    pointer-events:none;z-index:0;opacity:.12;mix-blend-mode:screen}
   .b-ring{position:relative;width:min(88vmin,520px);aspect-ratio:1/1;
     border-radius:50%;display:flex;align-items:center;justify-content:center}
   .b-talismans{position:absolute;inset:0;border-radius:50%;
-    border:1.4px solid rgba(255,214,107,.5);
-    box-shadow:0 0 26px rgba(232,181,71,.3), inset 0 0 36px rgba(232,181,71,.1);
-    animation:spin 160s linear infinite}
+    border:1.4px solid rgba(255,214,107,.3);
+    box-shadow:0 0 18px rgba(232,181,71,.18), inset 0 0 24px rgba(232,181,71,.06);
+    animation:spin 280s linear infinite}
   .b-talismans::before{content:"";position:absolute;inset:10px;border-radius:50%;
     border:1px dashed rgba(232,181,71,.3)}
   .b-t{position:absolute;top:50%;left:50%;width:min(11vmin,64px);aspect-ratio:1/1;margin-left:calc(min(11vmin,64px) / -2);margin-top:calc(min(11vmin,64px) / -2);
@@ -896,8 +896,8 @@
   .sk-status .sks-side.foe{color:rgba(255,148,128,.96);border-color:rgba(255,90,60,.55);background:rgba(255,90,60,.13);
     text-shadow:0 0 6px rgba(255,90,60,.35)}
   .sk-status .sks-text{flex:1;min-width:0;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .sk-status .sks-text.flash{animation:sksFlash .45s ease}
-  @keyframes sksFlash{0%{color:#FFF;text-shadow:0 0 10px #FFF}100%{color:var(--text);text-shadow:none}}
+  .sk-status .sks-text.flash{animation:sksFlash .6s ease}
+  @keyframes sksFlash{0%{color:#EEE;text-shadow:0 0 5px rgba(255,255,255,.5)}100%{color:var(--text);text-shadow:none}}
   .sk-status .sks-cd{flex:none;font-family:var(--mono);font-size:9.5px;color:var(--muted);
     padding:1px 6px;border-radius:4px;border:1px solid var(--line);background:rgba(255,255,255,.04)}
   .arena .clash{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);font-family:var(--serif);
@@ -917,13 +917,31 @@
     box-shadow:0 0 16px rgba(232,181,71,.65),inset 0 2px 4px rgba(255,255,255,.45)}
   .f-circle.foe{background:radial-gradient(circle at 32% 28%,#FFB4A0,#FF5A3C 55%,#5a1a10);
     box-shadow:0 0 16px rgba(255,90,60,.65),inset 0 2px 4px rgba(255,255,255,.35)}
-  .f-circle.hit-flash{animation:circleFlash .25s ease}
-  @keyframes circleFlash{0%{filter:brightness(2.2)}100%{filter:brightness(1)}}
+  .f-circle.hit-flash{animation:circleFlash .35s ease}
+  @keyframes circleFlash{0%{filter:brightness(1.35)}100%{filter:brightness(1)}}
   .f-circle.shield-flash{animation:shieldFlash .9s ease}
   @keyframes shieldFlash{
-    0%{box-shadow:0 0 16px rgba(255,255,255,.8),inset 0 0 10px rgba(255,255,255,.6)}
+    0%{box-shadow:0 0 12px rgba(255,255,255,.35),inset 0 0 8px rgba(255,255,255,.25)}
     100%{box-shadow:''}
   }
+  /* 技能对话框：漫画风格，球体头上显示文字 */
+  .skill-dialog{position:absolute;width:120px;z-index:10;pointer-events:none;
+    background:rgba(255,255,255,.95);border:2px solid #333;border-radius:10px;
+    padding:6px 8px;text-align:center;
+    font-family:var(--serif);font-size:12px;font-weight:700;color:#222;line-height:1.3;
+    box-shadow:0 2px 8px rgba(0,0,0,.4);
+    animation:dlgPop .3s ease}
+  .skill-dialog span{display:block}
+  .skill-dialog i{position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
+    width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;
+    border-top:8px solid #333}
+  .skill-dialog i::after{content:'';position:absolute;top:-10px;left:-6px;
+    width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;
+    border-top:6px solid rgba(255,255,255,.95)}
+  .skill-dialog.foe-dlg{background:rgba(255,230,225,.95);border-color:#8B0000;color:#5a1010}
+  .skill-dialog.foe-dlg i{border-top-color:#8B0000}
+  .skill-dialog.foe-dlg i::after{border-top-color:rgba(255,230,225,.95)}
+  @keyframes dlgPop{0%{opacity:0;transform:scale(.5) translateY(10px)}60%{transform:scale(1.1) translateY(-2px)}100%{opacity:1;transform:scale(1) translateY(0)}}
   /* 球下方的技能气泡（名字+倒计时），绝对定位在姓名底下方 */
   .f-circle .fc-skillbubble{
     position:absolute;top:100%;left:50%;transform:translate(-50%,10px);
@@ -1942,21 +1960,21 @@ const TRIGRAMS=[
 /* 角色详细属性：HP/伤害/回血/简介/双技能（按人物特点原创） */
 const MEMBER_ATTRS = {
 /* ===== 龙小组阵营 ===== */
-"龙叔":   {hp:220, atk:7, heal:2, radius:19, speedMult:0.92,
+"龙叔":   {hp:200, atk:7, heal:2, radius:19, speedMult:0.92,
   desc:"考古界武术双绝，拳脚如风，精通各国格斗术与符咒之力。",
   traits:["考古学家","正气武术大师","符咒守护者"],
   skills:[
+    {nm:"倒霉倒霉倒霉",       type:"ult", fx:"light",   desc:"龙叔经典口头禅爆发！让对方禁止所有行动，冻结3秒钟；自身速度增加4倍，血量增加4倍，攻击增加两倍。"},
     {nm:"旋风连环踢",       type:"atk", fx:"wind",    desc:"原地疾旋三次连环飞腿（成龙经典踢技），风刃残影劈开，造成ATK×3.2伤害并眩晕0.6秒。"},
-    {nm:"龙拳·爆破掌击",     type:"atk", fx:"fire",    desc:"龙小组龙形爆发拳，炽热气流聚于掌心一击推出，焰拱+火舌列，造成ATK×2.9火焰伤害并点燃0.5秒。"},
-    {nm:"符咒·疾速身法",     type:"atk", fx:"light",   desc:"兔符咒爆发神速，一道金光突进+十字圣辉，造成ATK×2.6伤害并打断敌方动作。"}]},
-"小玉":   {hp:170, atk:6, heal:3, radius:17, speedMult:1.15,
+    {nm:"龙拳·爆破掌击",     type:"atk", fx:"fire",    desc:"龙小组龙形爆发拳，炽热气流聚于掌心一击推出，焰拱+火舌列，造成ATK×2.9火焰伤害并点燃0.5秒。"}]},
+"小玉":   {hp:200, atk:6, heal:3, radius:17, speedMult:1.15,
   desc:"年纪轻轻却敢闯敢拼，身法灵巧，十二符咒的真正继承者。",
   traits:["顽皮领队","神出鬼没","符之少女"],
   skills:[
     {nm:"小玉·飞镖突袭",     type:"atk", fx:"water",   desc:"甩手三枚自制小竹飞镖（小玉偷玩道具），水滴飞溅+涟漪，造成ATK×2.8伤害并减速1.5秒。"},
     {nm:"龙小组·信号闪光",   type:"atk", fx:"light",   desc:"掏出小玉专属小手电筒爆闪信号，强光眩晕0.5秒并造成ATK×2.3圣光伤害。"},
     {nm:"鼠符咒·英雄突袭",   type:"atk", fx:"wind",    desc:"鼠符咒激活小玩具，英雄化突袭+风刃乱舞，造成ATK×2.5伤害并击飞。"}]},
-"老爹":   {hp:180, atk:5, heal:9, radius:18, speedMult:0.78,
+"老爹":   {hp:200, atk:5, heal:9, radius:18, speedMult:0.78,
   desc:"古董商兼气魔法宗师，一句『妖魔鬼怪快离开』斩尽诸邪。",
   traits:["气魔法师","古董大师","除魔驱邪"],
   skills:[
@@ -1964,42 +1982,42 @@ const MEMBER_ATTRS = {
       desc:"老爹掏出驱魔法器，7秒内每秒从球体内喷出『妖/魔/鬼/怪/快/离/开』七字，每字自动追踪对方，命中造成4点伤害。敌方防御技能每1秒只能抵消其中1个字。"},
     {nm:"气魔法·盐瓶守护",   type:"heal",fx:"water",   desc:"用老爹特制配方盐水淋身（除鬼秘方），水滴+涟漪净化，回复当前友军HP×32%并加护甲0.8秒。"},
     {nm:"阴阳·风水八卦",     type:"atk", fx:"thunder", desc:"掏出八挂图引动阴阳惊雷，锯齿紫电+zbranch电爆，造成ATK×2.4伤害并击晕0.4秒。"}]},
-"特鲁":   {hp:280,atk:8, heal:3, radius:21, speedMult:0.72,
+"特鲁":   {hp:200,atk:8, heal:3, radius:21, speedMult:0.72,
   desc:"老爹之徒，身躯魁梧力大无穷，一拳下去山崩地裂。",
   traits:["老爹弟子","巨型身躯","温柔巨人"],
   skills:[
     {nm:"山崩巨拳·陨石压",   type:"atk", fx:"thunder", desc:"蓄力大喝后泰山压顶（特鲁招牌），锯齿紫电+电爆圈，造成ATK×3.3范围伤害并击晕0.8秒。"},
     {nm:"师傅·茶道护元",     type:"heal",fx:"light",   desc:"按老爹教导斟茶运气，金光护甲+光环，回复HP×28%并提升攻击力0.8秒。"},
     {nm:"抱摔·大地震颤",     type:"atk", fx:"fire",    desc:"抱起目标重砸地面，火柱从裂痕喷起+焰拱，造成ATK×3.0伤害并30%眩晕。"}]},
-"布莱克": {hp:190,atk:7, heal:2, radius:18, speedMult:0.96,
+"布莱克": {hp:200,atk:7, heal:2, radius:18, speedMult:0.96,
   desc:"十三区最高指挥官，精通枪械与战术，行事雷厉风行。",
   traits:["十三区总指挥","战术专家","冷静果断"],
   skills:[
     {nm:"十三区·精准狙击",   type:"atk", fx:"thunder", desc:"2秒后锁定弱点射出雷霆弹，锯齿电芒，造成ATK×3.4真实伤害无视防御。"},
     {nm:"特工·电击手铳",     type:"atk", fx:"thunder", desc:"拔出小电铳连射3发电击弹，锯齿电芒+zbranch跳跃，总计ATK×2.6伤害并麻痹0.4秒。"},
     {nm:"战术·闪光破片",     type:"atk", fx:"light",   desc:"投出十三区特制闪光弹，十字圣辉炸开，造成ATK×2.2伤害并致盲0.8秒。"}]},
-"牛战士": {hp:240,atk:9, heal:2, radius:20, speedMult:0.82,
+"牛战士": {hp:200,atk:9, heal:2, radius:20, speedMult:0.82,
   desc:"从不摘面具的墨西哥传奇摔跤手，以纯粹蛮力碾压对手。",
   traits:["从不摘面具","墨西哥摔跤手","誓死不屈"],
   skills:[
     {nm:"面具神力·野牛冲撞", type:"atk", fx:"fire",    desc:"面具能量爆发全身冲撞（牛战士蛮力），焰拱+火柱，造成ATK×3.6伤害并击飞眩晕。"},
     {nm:"摔跤·巨力背摔",     type:"atk", fx:"wind",    desc:"扛起对手原地翻身背砸，气旋+风刃劈出，造成ATK×3.1伤害并流血。"},
     {nm:"图腾·赤牛守护",     type:"heal",fx:"light",   desc:"面具图腾之力觉醒，金光护甲+光环护体，回复HP×24%并减伤1.0秒。"}]},
-"帕克":   {hp:160, atk:5, heal:4, radius:17, speedMult:1.08,
+"帕克":   {hp:200, atk:5, heal:4, radius:17, speedMult:1.08,
   desc:"小玉的忠实队友，热爱摔跤与英雄漫画，擅长奇袭。",
   traits:["小玉队友","摔跤迷弟","机智鬼灵精"],
   skills:[
     {nm:"迷弟·飞身压顶",     type:"atk", fx:"wind",    desc:"模仿偶像跳至半空砸下（帕克学牛战士），气旋+风刃，造成ATK×2.0伤害并降防2秒。"},
     {nm:"自制·弹弓突袭",     type:"atk", fx:"water",   desc:"用自制小弹弓发射冰珠石子，水珠+涟漪炸开，造成ATK×1.8伤害并减速1秒。"},
     {nm:"小玉应援·口号",     type:"heal",fx:"light",   desc:"声嘶力竭加油口号（小玉后援团团长！），圣光辉护，回复友军HP×18%并提速。"}]},
-"小蛇":   {hp:180, atk:8, heal:3, radius:17, speedMult:1.12,
+"小蛇":   {hp:200, atk:8, heal:3, radius:17, speedMult:1.12,
   desc:"义贼神偷，行动敏捷无声，擅长趁虚而入一击毙命。",
   traits:["义贼神偷","隐身潜行","身法敏捷"],
   skills:[
     {nm:"影袭·毒蛇双刺",     type:"atk", fx:"dark",    desc:"隐身贴近连刺两下（小蛇义贼毒刃），暗球+爪痕+黑雾，造成ATK×2.8伤害并中毒3秒。"},
     {nm:"偷窃·飞索夺宝",     type:"atk", fx:"wind",    desc:"甩出飞索绕身突袭，残影拖尾+风刃乱舞，造成ATK×2.5伤害并偷取敌方攻击力。"},
     {nm:"迷粉·烟雾遁走",     type:"atk", fx:"water",   desc:"抛出粉色迷粉烟雾，水花状迷乱敌方方向1秒并造成ATK×1.9伤害。"}]},
-"超级驼鹿":{hp:260,atk:9, heal:3, radius:20, speedMult:0.88,
+"超级驼鹿":{hp:200,atk:9, heal:3, radius:20, speedMult:0.88,
   desc:"驼鹿图腾觉醒化身，正义的化身，所到之处邪恶退散。",
   traits:["图腾觉醒","正义象征","英雄驼鹿"],
   skills:[
@@ -2014,35 +2032,35 @@ const MEMBER_ATTRS = {
     {nm:"暗影·金钱镖",       type:"atk", fx:"dark",    desc:"掷出三枚沾有邪气的金镖（瓦龙老板招牌），暗球+爪痕+黑雾，造成ATK×2.7伤害并吸速。"},
     {nm:"圣主·邪咒指令",     type:"atk", fx:"dark",    desc:"默念圣主邪咒招来黑雾血祭，暗球×2+烟雾列，造成ATK×2.4伤害并扣除回血1秒。"},
     {nm:"黑手·金刀突袭",     type:"atk", fx:"wind",    desc:"抽出随身金柄短刀快速劈斩，残影拖尾+风刃切割，造成ATK×2.5伤害并打断。"}]},
-"阿奋":   {hp:210, atk:7, heal:2, radius:19, speedMult:0.90,
+"阿奋":   {hp:200, atk:7, heal:2, radius:19, speedMult:0.90,
   desc:"黑手帮头号打手，做事老练，擅长冷兵器突袭。",
   traits:["黑手帮一哥","冷兵器专家","冷酷打手"],
   skills:[
     {nm:"砍刀·四连斩",       type:"atk", fx:"wind",    desc:"挥舞长砍刀连续劈砍（阿奋冷兵器），4道风刃+残影，造成ATK×2.5伤害并末尾流血。"},
     {nm:"冷刃·回旋飞掷",     type:"atk", fx:"wind",    desc:"甩出备用砍刀绕身斩击，风刃+气旋环绕，造成ATK×2.2伤害并减速。"},
     {nm:"黑手·电棍制裁",     type:"atk", fx:"thunder", desc:"掏出黑手帮专用电棍劈下，锯齿闪电+zbranch，造成ATK×2.4伤害并麻痹0.5秒。"}]},
-"拉苏":   {hp:240, atk:6, heal:2, radius:20, speedMult:0.76,
+"拉苏":   {hp:200, atk:6, heal:2, radius:20, speedMult:0.76,
   desc:"黑手帮高大块头，虽常闹笑话但蛮力惊人，被打中相当痛。",
   traits:["巨汉打手","脑筋迟钝","力大如牛"],
   skills:[
     {nm:"哑铃·烈焰重击",     type:"atk", fx:"fire",    desc:"举起两只生铁哑铃全力砸下（拉苏随身凶器），焰拱+3火舌+火柱，造成ATK×3.0伤害并50%眩晕0.6秒。"},
     {nm:"铁锤·地震砸",       type:"atk", fx:"thunder", desc:"从身后掏出大铁锤重砸地面，锯齿闪电+zbranch电爆，造成ATK×2.8伤害并击晕0.5秒。"},
     {nm:"蛮汉·撞击",         type:"atk", fx:"fire",    desc:"整个人像墙一样撞向目标，火舌+焰拱冲开，造成ATK×2.6伤害并击退。"}]},
-"周":     {hp:185, atk:7, heal:2, radius:18, speedMult:0.98,
+"周":     {hp:200, atk:7, heal:2, radius:18, speedMult:0.98,
   desc:"黑手帮话痨担当，嘴炮与拳头一样从不停止。",
   traits:["话痨担当","碎嘴拳手","容易坏事"],
   skills:[
     {nm:"碎嘴·拳头连打",     type:"atk", fx:"thunder", desc:"边喊边挥拳连打5次（阿周话痨攻击），电芒+zbranch跳跃，造成ATK×2.8伤害并易伤。"},
     {nm:"话痨·嘴炮声波",     type:"atk", fx:"water",   desc:"张嘴一顿狂骂喷出口水声波，水珠+涟漪震荡，造成ATK×2.0伤害并迷乱方向1秒。"},
     {nm:"黑手·玻璃瓶砸",     type:"atk", fx:"fire",    desc:"抄起路边玻璃瓶往对方头上砸，火舌+焰拱爆裂，造成ATK×2.3伤害并50%流血。"}]},
-"黑虎阿福":{hp:230,atk:10, heal:2, radius:19, speedMult:1.00,
+"黑虎阿福":{hp:200,atk:10, heal:2, radius:19, speedMult:1.00,
   desc:"武术界活字典，乌鸦坐飞机、龙卷风摧毁停车场，招招致命。",
   traits:["招式起名王","武术活字典","招大招狠"],
   skills:[
     {nm:"乌鸦坐飞机",         type:"atk", fx:"wind",    desc:"经典空翻重砸（黑虎阿福成名技），残影拖尾+风刃砸落，造成ATK×3.8伤害并二次冲击。"},
     {nm:"龙卷风摧毁停车场",   type:"atk", fx:"wind",    desc:"原地高速旋转卷起巨型气旋+6风刃撕裂，造成ATK×3.4范围伤害并卷飞。"},
     {nm:"暴龙振翅飞翔",       type:"atk", fx:"fire",    desc:"模仿火龙振翅前扑，6火舌+焰拱横扫，造成ATK×3.0伤害并点燃0.6秒。"}]},
-"特鲁黑": {hp:290,atk:9, heal:2, radius:22, speedMult:0.70,
+"特鲁黑": {hp:200,atk:9, heal:2, radius:22, speedMult:0.70,
   desc:"昔日的黑手帮巨汉，以蛮力闻名，尚未脱离黑暗之时。",
   traits:["黑手巨汉","黑暗形态","暴锤能手"],
   skills:[
@@ -2050,42 +2068,42 @@ const MEMBER_ATTRS = {
     {nm:"黑手·重压扑杀",     type:"atk", fx:"thunder", desc:"全身压下重砸地面，锯齿闪电+zbranch从脚下爆散，命中附加当前HP×18%真实伤害。"},
     {nm:"黑手双连击",         type:"atk", fx:"fire",    desc:"左右开弓两拳连发，火舌+焰拱扑面，造成ATK×2.4伤害并击飞。"}]},
 /* ===== 刀龙阵营 ===== */
-"刀龙":   {hp:84, atk:16, heal:8, radius:28, speedMult:1.00,
+"刀龙":   {hp:300, atk:16, heal:8, radius:28, speedMult:1.00,
   desc:"黑气巫师，精通黑暗禁忌法术，一心夺取十二符咒。",
   traits:["黑气巫师","贪婪狡诈","符咒狂热者"],
   skills:[
     {type:"atk", fx:"dark", nm:"黑气·噬魂暗矢", desc:"射出3发黑暗箭矢，每发ATK×1.4伤害并扣除敌方回血。"},
     {type:"heal", fx:"dark", nm:"禁忌·复生咒", desc:"驱散自身所有Debuff并回复HP×40%，3秒内免疫控制。"},
     {type:"atk", fx:"dark", nm:"黑暗契约·咒封", desc:"封印敌方1个技能1.5秒，期间造成ATK×1.8持续伤害。"}]},
-"甘":     {hp:80, atk:14, heal:3, radius:28, speedMult:1.06,
+"甘":     {hp:300, atk:14, heal:3, radius:28, speedMult:1.06,
   desc:"黑暗杀手·剑手（阿奋黑化），剑速之快肉眼难辨。",
   traits:["黑暗杀手·剑","剑气锋利","剑出必伤"],
   skills:[
     {type:"atk", fx:"wind", nm:"暗剑·十字斩", desc:"挥出交叉剑气造成ATK×2.6伤害并削减敌方10%防御。"},
     {type:"atk", fx:"dark", nm:"杀手·影步", desc:"瞬移到敌方身后，下一击翻倍伤害且必定暴击。"},
     {type:"atk", fx:"thunder", nm:"六剑齐发", desc:"向六个方向射出飞剑，范围内总计造成ATK×2.2伤害。"}]},
-"文":     {hp:106,atk:12, heal:3, radius:32, speedMult:0.92,
+"文":     {hp:300,atk:12, heal:3, radius:32, speedMult:0.92,
   desc:"黑暗杀手·徒手（拉苏黑化），空手碎石。",
   traits:["黑暗杀手·拳","钢铁拳骨","空手碎石"],
   skills:[
     {type:"atk", fx:"thunder", nm:"暗手·裂地拳", desc:"双手砸出地震造成ATK×3.0伤害并使敌方攻击落空。"},
     {type:"def", fx:"light", nm:"钢铁皮肤", desc:"2.5秒减伤60%并反弹15%伤害给攻击者。"},
     {type:"atk", fx:"dark", nm:"暗拳·穿心", desc:"直拳破甲造成ATK×2.3伤害并穿透敌方30%防御。"}]},
-"崔":     {hp:88, atk:13, heal:3, radius:29, speedMult:1.00,
+"崔":     {hp:300, atk:13, heal:3, radius:29, speedMult:1.00,
   desc:"黑暗杀手·链锤（周黑化），挥舞重链，中远距离通吃。",
   traits:["黑暗杀手·链","重链挥舞","中距离杀手"],
   skills:[
     {type:"atk", fx:"wind", nm:"链锤·旋风扫荡", desc:"旋转横扫3圈总计ATK×3.2伤害并拖慢敌方速度。"},
     {type:"atk", fx:"wind", nm:"夺命飞锤", desc:"掷出链锤缠住敌方，造成ATK×2.2伤害并束缚0.8秒。"},
     {type:"atk", fx:"dark", nm:"锁链缠绕", desc:"抛出锁链缠住敌方0.6秒并拖向己方，造成ATK×1.5伤害。"}]},
-"山":     {hp:130,atk:17, heal:3, radius:35, speedMult:0.90,
+"山":     {hp:300,atk:17, heal:3, radius:35, speedMult:0.90,
   desc:"黑暗杀手·巨力（阿福黑化），黑气加持下招式更狠。",
   traits:["黑暗杀手·巨力","黑化阿福","破坏力惊人"],
   skills:[
     {type:"atk", fx:"fire", nm:"黑虎掏心·强化", desc:"黑化强化版，造成ATK×4.0毁灭性单体伤害。"},
     {type:"atk", fx:"dark", nm:"黑气暴走", desc:"5秒攻击力提升45%但受到伤害加20%，全力一战。"},
     {type:"atk", fx:"fire", nm:"黑气·崩山掌", desc:"重掌推出造成ATK×2.8伤害并击飞敌方4米远。"}]},
-"鬼影巫师":{hp:76, atk:12, heal:10,radius:27, speedMult:1.02,
+"鬼影巫师":{hp:300, atk:12, heal:10,radius:27, speedMult:1.02,
   desc:"刀龙麾下的黑气仆从，擅长以诅咒削弱对手。",
   traits:["黑气仆从","诅咒缠身","弱化专家"],
   skills:[
@@ -2093,56 +2111,56 @@ const MEMBER_ATTRS = {
     {type:"heal", fx:"dark", nm:"亡灵回潮", desc:"吸收残响，全体友军回复HP×25%并获得持续回能。"},
     {type:"atk", fx:"dark", nm:"恐影附身", desc:"附身在敌方身上1.2秒内操纵其自伤ATK×0.4每0.2秒。"}]},
 /* ===== 恶魔卍阵营 ===== */
-"圣主":   {hp:130,atk:20, heal:6, radius:35, speedMult:1.00,
+"圣主":   {hp:500,atk:20, heal:6, radius:35, speedMult:1.00,
   desc:"火之恶魔·十二符咒宿主，龙形真身傲视天下。",
   traits:["火之恶魔","符咒之王","八恶魔之首"],
   skills:[
     {type:"atk", fx:"fire", nm:"符咒·十二连焱", desc:"释放十二符咒烈焰，造成ATK×4.5持续火焰伤害。"},
     {type:"def", fx:"fire", nm:"龙形真身", desc:"化身为龙4秒：HP上限加40%，ATK加35%并免疫控制。"},
     {type:"atk", fx:"fire", nm:"火炎·龙吐息", desc:"喷射灼热烈焰造成ATK×3.0范围伤害并点燃2秒。"}]},
-"咒蓝":   {hp:115,atk:17, heal:6, radius:33, speedMult:0.95,
+"咒蓝":   {hp:500,atk:17, heal:6, radius:33, speedMult:0.95,
   desc:"月之恶魔，操控引力牵引万物，万物臣服其下。",
   traits:["月之恶魔","引力之主","八恶魔大哥"],
   skills:[
     {type:"atk", fx:"thunder", nm:"月之引力·坍缩", desc:"压缩敌下重力造成ATK×3.4伤害并定身1秒。"},
     {type:"def", fx:"light", nm:"反重力地带", desc:"3秒内敌方移速降低60%，自身攻击附带击飞。"},
     {type:"atk", fx:"water", nm:"月能·潮汐牵引", desc:"将敌方拉扯近身并造成ATK×2.2伤害，附加0.6秒束缚。"}]},
-"波刚":   {hp:170,atk:18, heal:8, radius:38, speedMult:0.72,
+"波刚":   {hp:500,atk:18, heal:8, radius:38, speedMult:0.72,
   desc:"山之恶魔·吞噬之口，体型最大食量惊人，挨打越狠反击越烈。",
   traits:["山之恶魔","吞噬巨躯","八恶魔大姐"],
   skills:[
     {type:"atk", fx:"dark", nm:"吞噬·吞天食地", desc:"张口吞噬敌方造成ATK×3.8真伤，20%伤害转为回血。"},
     {type:"atk", fx:"thunder", nm:"泰山压顶", desc:"跃起巨体砸下，大范围ATK×4.0伤害并眩晕2秒。"},
     {type:"atk", fx:"fire", nm:"暴食·反击之胃", desc:"吞下所有敌方弹幕并转化为反吐ATK×2.0弹幕。"}]},
-"啸风":   {hp:92, atk:14, heal:4, radius:28, speedMult:1.22,
+"啸风":   {hp:500, atk:14, heal:4, radius:28, speedMult:1.22,
   desc:"风之恶魔，风暴主宰，来去无声瞬息千里。",
   traits:["风之恶魔","风暴大师","速度惊人"],
   skills:[
     {type:"atk", fx:"wind", nm:"真空·风刃撕裂", desc:"吹出数道风刃总计ATK×2.8伤害并使敌方流血。"},
     {type:"def", fx:"wind", nm:"气旋·九天风壁", desc:"形成环绕风壁4秒，反弹50%远程攻击并减速敌方。"},
     {type:"atk", fx:"wind", nm:"追风·极速突袭", desc:"化身风暴突进敌方，造成ATK×2.2伤害并推远目标。"}]},
-"中苏":   {hp:105,atk:21, heal:4, radius:31, speedMult:1.08,
+"中苏":   {hp:500,atk:21, heal:4, radius:31, speedMult:1.08,
   desc:"雷之恶魔，雷霆降世霹雳万千，触之即伤。",
   traits:["雷之恶魔","雷电化身","暴烈雷霆"],
   skills:[
     {type:"atk", fx:"thunder", nm:"天雷·万雷齐发", desc:"云端降落九道雷击，随机命中敌方，总计ATK×4.2伤害。"},
     {type:"def", fx:"thunder", nm:"引雷入体", desc:"2秒内吸收下一次伤害并转为攻击力提升50%。"},
     {type:"atk", fx:"thunder", nm:"雷电·链状跳跃", desc:"发射跳跃闪电，在敌阵反弹4次并每次造成ATK×1.0伤害。"}]},
-"巴莎":   {hp:100,atk:15, heal:10,radius:30, speedMult:1.04,
+"巴莎":   {hp:500,atk:15, heal:10,radius:30, speedMult:1.04,
   desc:"水之恶魔，化身怒涛席卷万物，流水绵绵不歇自愈惊人。",
   traits:["水之恶魔","万水之主","超强自愈"],
   skills:[
     {type:"atk", fx:"water", nm:"怒涛·潮汐吞噬", desc:"召唤巨浪淹没敌方，造成ATK×3.2伤害并冻结技能CD。"},
     {type:"heal", fx:"water", nm:"水灵不灭", desc:"3秒水元素形态，受到伤害70%转为治疗效果。"},
     {type:"atk", fx:"water", nm:"水鞭·连环卷", desc:"水鞭缠绕敌方0.8秒并抽打造成ATK×2.4伤害。"}]},
-"地魁":   {hp:155,atk:19, heal:4, radius:36, speedMult:0.80,
+"地魁":   {hp:500,atk:19, heal:4, radius:36, speedMult:0.80,
   desc:"地之恶魔，脚下即领域，大地震裂万物崩毁。",
   traits:["地之恶魔","大地君主","年轻力盛"],
   skills:[
     {type:"atk", fx:"fire", nm:"地裂·九州倾覆", desc:"脚下大地爆裂，ATK×3.6范围伤害并击飞所有敌方。"},
     {type:"def", fx:"light", nm:"岩甲神躯", desc:"3.5秒岩浆岩甲：减伤55%且被攻击反伤25%。"},
     {type:"atk", fx:"thunder", nm:"地刺·百花齐放", desc:"从地面升起地刺列，路径上ATK×2.6伤害并困住0.6秒。"}]},
-"西木":   {hp:86, atk:16, heal:5, radius:27, speedMult:1.26,
+"西木":   {hp:500, atk:16, heal:5, radius:27, speedMult:1.26,
   desc:"天之恶魔·幻象之王，天空即其领域，虚实难分真假莫测。",
   traits:["天之恶魔","幻象之王","最强大脑"],
   skills:[
@@ -2150,77 +2168,77 @@ const MEMBER_ATTRS = {
     {type:"def", fx:"dark", nm:"遁入云霄", desc:"飞上天空1.5秒无敌，落地俯冲造成ATK×2.8伤害。"},
     {type:"atk", fx:"light", nm:"幻象·替身分身", desc:"制造1个假身吸收一次攻击，真身随机瞬移到另一侧。"}]},
 /* ===== 面具の阵营 ===== */
-"塔拉":   {hp:120,atk:19, heal:5, radius:33, speedMult:1.02,
+"塔拉":   {hp:400,atk:19, heal:5, radius:33, speedMult:1.02,
   desc:"黑影王国鬼王，统领九大鬼影将军，操控阴影无处不在。",
   traits:["黑影鬼王","面具之主","九大鬼影首领"],
   skills:[
     {type:"atk", fx:"dark", nm:"鬼影·九召合一", desc:"召唤九大鬼影出击，造成ATK×4.2伤害并吸取攻击。"},
     {type:"def", fx:"dark", nm:"黑影化·鬼王真身", desc:"3秒无敌阴影，现身时爆发范围大伤害。"},
     {type:"atk", fx:"dark", nm:"影域·黑影吞噬", desc:"张开领域吞噬视野1.5秒，期间造成ATK×2.4持续伤害。"}]},
-"尼嘉":   {hp:95, atk:16, heal:4, radius:30, speedMult:1.10,
+"尼嘉":   {hp:400, atk:16, heal:4, radius:30, speedMult:1.10,
   desc:"忍者团将军·鬼影之首，精于忍术暗器，出手无声。",
   traits:["忍者团将军","暗器精通","鬼影之首"],
   skills:[
     {type:"atk", fx:"dark", nm:"影分身·千本苦无", desc:"三身齐放苦无雨总计ATK×3.0伤害，多段减速。"},
     {type:"atk", fx:"dark", nm:"忍法·影遁藏形", desc:"隐入地底1秒，现身一击ATK×2.5并附加重伤。"},
     {type:"atk", fx:"wind", nm:"鬼影飞针", desc:"射出9连发飞针，总计ATK×2.2伤害，附带中毒。"}]},
-"拉佐":   {hp:102,atk:18, heal:3, radius:31, speedMult:1.04,
+"拉佐":   {hp:400,atk:18, heal:3, radius:31, speedMult:1.04,
   desc:"刺刃团将军·利刃风暴，全身上下皆是凶器。",
   traits:["刺刃团将军","全身利刃","人形刀山"],
   skills:[
     {type:"atk", fx:"wind", nm:"刺刃·暴风锯轮", desc:"化身旋转利刃2秒，接触敌方累计ATK×3.4伤害。"},
     {type:"atk", fx:"wind", nm:"利刃爆发", desc:"弹射八方刀刃，中距离ATK×2.6伤害并流血。"},
     {type:"def", fx:"wind", nm:"刃甲·自残反伤", desc:"开启刃甲2秒，每次被打立刻反弹ATK×0.6给攻击者。"}]},
-"巴特":   {hp:88, atk:15, heal:4, radius:28, speedMult:1.24,
+"巴特":   {hp:400, atk:15, heal:4, radius:28, speedMult:1.24,
   desc:"夜蝠团将军·暗夜飞翔，居高临下难防难守。",
   traits:["夜蝠团将军","暗夜飞行","超声波压制"],
   skills:[
     {type:"atk", fx:"wind", nm:"音波·夜蝠嘶鸣", desc:"爆发超声波造成ATK×2.4伤害并沉默敌方1.5秒。"},
     {type:"atk", fx:"dark", nm:"群蝠轰炸", desc:"召唤15只夜蝠轮番撞击，总计ATK×3.8伤害。"},
     {type:"heal", fx:"dark", nm:"吸血蝠·生命汲取", desc:"吸血一击造成ATK×2.0伤害并100%转化为回血。"}]},
-"萨莫":   {hp:145,atk:17, heal:4, radius:36, speedMult:0.82,
+"萨莫":   {hp:400,atk:17, heal:4, radius:36, speedMult:0.82,
   desc:"巨魔团将军·巨力破敌，力大无穷以力破巧。",
   traits:["巨魔团将军","巨型躯体","怪力无双"],
   skills:[
     {type:"atk", fx:"fire", nm:"巨魔·万钧一掷", desc:"举起巨石掷向敌方，ATK×3.6伤害并溅碎石。"},
     {type:"atk", fx:"light", nm:"蛮勇之怒", desc:"3秒攻击加50%减防御20%，以命搏命狂暴。"},
     {type:"atk", fx:"thunder", nm:"巨神双摔", desc:"一手一个砸地造成ATK×2.8并击晕0.8秒。"}]},
-"伊卡":   {hp:108,atk:17, heal:4, radius:31, speedMult:1.02,
+"伊卡":   {hp:400,atk:17, heal:4, radius:31, speedMult:1.02,
   desc:"武士团将军·双刀战法，斩击精准攻守兼备。",
   traits:["武士团将军","双刀大师","武士气节"],
   skills:[
     {type:"atk", fx:"wind", nm:"双刀·月影连斩", desc:"双剑交辉6连击造成ATK×3.4伤害，最后一击破甲。"},
     {type:"atk", fx:"light", nm:"居合·回天", desc:"拔刀斩出半月ATK×2.6伤害，并反弹当次弹道技能。"},
     {type:"atk", fx:"light", nm:"武士道·极意", desc:"集中精神1.2秒，下次攻击必定暴击且伤害加50%。"}]},
-"雷苏":   {hp:84, atk:14, heal:5, radius:28, speedMult:1.16,
+"雷苏":   {hp:400, atk:14, heal:5, radius:28, speedMult:1.16,
   desc:"异形团将军·伸缩无形，可任意延展身体出其不意。",
   traits:["异形团将军","伸缩自在","肢体异变"],
   skills:[
     {type:"atk", fx:"dark", nm:"伸缩·远程触手", desc:"拉长肢体重击敌方，ATK×2.8伤害并束缚0.6秒。"},
     {type:"heal", fx:"water", nm:"畸变再生", desc:"立即重置技能CD并回复HP×22%生命。"},
     {type:"atk", fx:"wind", nm:"橡胶·肉弹冲击", desc:"拉长身体弹射撞击，ATK×2.4伤害并弹跳3次。"}]},
-"明塔":   {hp:90, atk:15, heal:6, radius:29, speedMult:1.08,
+"明塔":   {hp:400, atk:15, heal:6, radius:29, speedMult:1.08,
   desc:"噬影团将军·影吞万物，越打越强，吞噬阴影化为己力。",
   traits:["噬影团将军","以影为食","越战越强"],
   skills:[
     {type:"atk", fx:"dark", nm:"噬影·虚无漩涡", desc:"黑色漩涡拉扯伤害敌方，总计ATK×3.2伤害。"},
     {type:"atk", fx:"dark", nm:"影吸·强化", desc:"吸走敌方1个Buff并转化为属性强化3秒。"},
     {type:"atk", fx:"dark", nm:"暴食之牙", desc:"咬住敌方0.8秒持续咬噬造成ATK×2.4伤害并100%吸血。"}]},
-"卡博":   {hp:110,atk:16, heal:4, radius:32, speedMult:0.98,
+"卡博":   {hp:400,atk:16, heal:4, radius:32, speedMult:0.98,
   desc:"猎钳团将军·钳击狩猎，一双巨钳能夹碎金石。",
   traits:["猎钳团将军","巨钳双剪","狩猎本能"],
   skills:[
     {type:"atk", fx:"dark", nm:"猎钳·断骨夹击", desc:"双钳猛夹造成ATK×3.3伤害并禁止敌方回血2秒。"},
     {type:"atk", fx:"dark", nm:"钳锁·束缚", desc:"钳住敌方1秒，期间持续伤害20每0.3秒不能挣脱。"},
     {type:"atk", fx:"wind", nm:"蟹钳·疾剪", desc:"迅速剪击两次造成ATK×2.6伤害，必定打断动作。"}]},
-"曼尼":   {hp:96, atk:19, heal:3, radius:29, speedMult:1.14,
+"曼尼":   {hp:400, atk:19, heal:3, radius:29, speedMult:1.14,
   desc:"螳形团将军·螳螂疾剪，速度与伤害双绝，一击必杀。",
   traits:["螳形团将军","螳螂身法","必杀剪刀手"],
   skills:[
     {type:"atk", fx:"wind", nm:"螳螂·疾风两剪", desc:"双刀极速两斩，ATK×3.5伤害第二刀必定暴击。"},
     {type:"atk", fx:"thunder", nm:"残影·疾如闪电", desc:"2秒内速度加80%，必定先手并附带穿透。"},
     {type:"atk", fx:"wind", nm:"双刀·十字剪", desc:"交叉剪击造成ATK×2.9伤害，剪切后速度减40%2秒。"}]},
-"小玉黑化":{hp:78, atk:15, heal:6, radius:26, speedMult:1.22,
+"小玉黑化":{hp:300, atk:15, heal:6, radius:26, speedMult:1.22,
   desc:"黑影军团前任女王黑化形态，危险与魅力并存。",
   traits:["黑影前女王","黑化小玉","危险少女"],
   skills:[
@@ -2228,28 +2246,28 @@ const MEMBER_ATTRS = {
     {type:"atk", fx:"dark", nm:"黑雾侵蚀", desc:"黑雾覆盖敌方3秒，每0.4秒ATK×0.4伤害并致盲。"},
     {type:"atk", fx:"dark", nm:"影刃·少女一击", desc:"瞬身至身侧影刃穿刺，ATK×2.5伤害并触发全员加速1秒。"}]},
 /* ===== 魔气阵营 ===== */
-"恶魔小龙":{hp:130,atk:22, heal:5, radius:34, speedMult:1.08,
+"恶魔小龙":{hp:300,atk:22, heal:5, radius:34, speedMult:1.08,
   desc:"魔气之首·圣主之子，身负八大魔气，意欲改天换地。",
   traits:["魔气之首","圣主之子","未来之魔"],
   skills:[
     {type:"atk", fx:"fire", nm:"八魔气·大毁天", desc:"轮番释放八大魔气，造成ATK×5.0毁灭混合伤害。"},
     {type:"atk", fx:"fire", nm:"魔龙·焚身", desc:"火焰爆发范围灼烧ATK×2.8，3秒内攻击加30%。"},
     {type:"def", fx:"fire", nm:"魔气·化龙变身", desc:"变身魔龙形态4秒：HP加30%，ATK加40%，免疫Debuff。"}]},
-"寒冰":   {hp:102,atk:17, heal:3, radius:30, speedMult:1.06,
+"寒冰":   {hp:300,atk:17, heal:3, radius:30, speedMult:1.06,
   desc:"火之魔气宿主·格斗家，拳脚生风，拳拳到肉。",
   traits:["火之魔气宿主","不良少年","格斗高手"],
   skills:[
     {type:"atk", fx:"fire", nm:"烈焰格斗·组合拳", desc:"八段烈焰连击ATK×3.2伤害，每段10%几率点燃。"},
     {type:"atk", fx:"fire", nm:"爆燃冲拳", desc:"蓄力冲刺一击ATK×2.9伤害并击退，沿途留火焰带。"},
     {type:"heal", fx:"fire", nm:"火气·爆发", desc:"点燃全身1.5秒，近身造成灼烧并立即回复HP×15%。"}]},
-"毒蛇":   {hp:86, atk:16, heal:6, radius:27, speedMult:1.18,
+"毒蛇":   {hp:300, atk:16, heal:6, radius:27, speedMult:1.18,
   desc:"水之魔气宿主·蛇拳，身形蜿蜒诡异难测。",
   traits:["水之魔气宿主","蛇拳诡异","妖艳冷酷"],
   skills:[
     {type:"atk", fx:"water", nm:"蛇形·毒牙突袭", desc:"缠绕三连击ATK×2.9伤害并施加强力中毒。"},
     {type:"def", fx:"dark", nm:"水蛇蜕皮", desc:"立即解除所有Debuff，1.5秒隐身高速度加50%。"},
     {type:"atk", fx:"dark", nm:"毒雾·致命芬芳", desc:"喷出粉色毒雾3秒内持续中毒并使敌方迷乱反向。"}]},
-"拳师":   {hp:140,atk:16, heal:3, radius:35, speedMult:0.86,
+"拳师":   {hp:300,atk:16, heal:3, radius:35, speedMult:0.86,
   desc:"地之魔气宿主·摔角手，擅长抱摔锁技，力量型选手。",
   traits:["地之魔气宿主","摔角王者","肌肉猛男"],
   skills:[
@@ -3269,7 +3287,18 @@ function _emptySideStatus(){
     streamLZ7Until:0,                     // S3①咒语升级版：30s 每秒喷 1 个字（妖魔鬼怪快离开 循环，不放技能）
     rotLZ7Until:0,                        // S3②咒语高级版：30s 7字环绕旋转
     _chaosSent:9,                         // S3③咒语终极版："已喷出几个字"，9>=7 表示"未激活 / 已喷完"避免按 undefined<7 误喷
-    _chaosAcc:0                           // S3③终极版：dt 秒级累加器，满 60 喷 1 字
+    _chaosAcc:0,                          // S3③终极版：dt 秒级累加器，满 60 喷 1 字
+    // ===== 十二符咒 · 主动技能专属状态（阵营级，until=dt 单位，1s=60dt）=====
+    burnUntil:0, burnDmg:0, _burnAcc:0,  // ④龙·焰龙符：灼烧DoT（此侧受到的持续火焰伤害）
+    invisUntil:0,                          // ⑤蛇·隐遁符：隐身（敌方无法锁定/攻击此侧）
+    regenUntil:0, regenAmt:0, _regenAcc:0,// ⑥马·愈伤符：持续回血
+    transformUntil:0,                      // ⑧猴·变幻符：此侧被变形（攻击=1，速度-50%）
+    floatUntil:0,                          // ⑨鸡·凌空符：漂浮（免疫碰撞伤害，速度+40%）
+    soulUntil:0,                           // ⑦羊·离魂符：灵魂出窍（无敌但无法攻击）
+    spdMulUntil:0, spdMul:1.0,            // ③兔·神速符：移动速度倍率
+    cdMulUntil:0, cdMul:1.0,              // ③兔·神速符：技能冷却倍率
+    defMulUntil:0, defMul:1.0,            // 龙叔终极技：防御倍率（0.5=伤害减半）
+    _talismanFx:null                       // 当前激活的符咒特效标记 {idx, nm, until}
   };
 }
 function resetBSS(){
@@ -3306,10 +3335,83 @@ function tickBSS(dt){
   // 每阵营 until 递减 + borrow 到期还原
   ['you','foe'].forEach(function(s){
     var st=_bss[s];
-    ['atkMulUntil','atkPinUntil','hpLockUntil','freezeUntil','skillBanUntil','borrowUntil','streamLZ7Until','rotLZ7Until'].forEach(function(k){
+    ['atkMulUntil','atkPinUntil','hpLockUntil','freezeUntil','skillBanUntil','borrowUntil','streamLZ7Until','rotLZ7Until','burnUntil','invisUntil','regenUntil','transformUntil','floatUntil','soulUntil','spdMulUntil','cdMulUntil','defMulUntil','_tigerBalanceUntil'].forEach(function(k){
       st[k]=Math.max(0, st[k]-dt);
     });
     if(st.atkMulUntil<=0){ st.atkMul = 1.0; }
+    if(st.spdMulUntil<=0){ st.spdMul = 1.0; }
+    if(st.cdMulUntil<=0){ st.cdMul = 1.0; }
+    if(st.defMulUntil<=0){ st.defMul = 1.0; }
+    if(st._tigerBalanceUntil<=0){ st._tigerBalance = 1.0; }
+    // 十二符咒 · 隐身到期恢复球体不透明度
+    if(st.invisUntil<=0){
+      try{ var invPc=findPhysBySide(s); if(invPc&&invPc.el){ invPc.el.style.opacity=''; invPc.el.style.transition=''; } }catch(_){}
+    }
+    // 十二符咒 · 马被动回血：每秒回_passiveRegen点
+    if(battle && !battle.over){
+      var regenList = s==='you'? battle.you : battle.foe;
+      var regenIdx = s==='you'? battle.yi : battle.fi;
+      if(regenList[regenIdx] && regenList[regenIdx].alive && regenList[regenIdx]._passiveRegen && regenList[regenIdx]._passiveRegen>0){
+        st._passiveRegenAcc = (st._passiveRegenAcc||0) + dt;
+        while(st._passiveRegenAcc >= 60){
+          st._passiveRegenAcc -= 60;
+          var mxR = regenList[regenIdx].maxHp || regenList[regenIdx].max || 100;
+          regenList[regenIdx].hp = Math.min(mxR, regenList[regenIdx].hp + regenList[regenIdx]._passiveRegen);
+        }
+      }
+    }
+    // ⭐ 龙叔终极技：血量4倍到期还原
+    if(battle && !battle.over){
+      var ultList = s==='you'? battle.you : battle.foe;
+      ultList.forEach(function(u){
+        if(u._ultHpBoosted && u._ultHpUntil!==undefined){
+          u._ultHpUntil = Math.max(0, u._ultHpUntil - dt);
+          if(u._ultHpUntil<=0){
+            // 还原maxHp，hp按比例缩放
+            var curMax = u.maxHp || u.max || 100;
+            var origMax = u._ultOrigMaxHp || Math.round(curMax/4);
+            var hpRatio = u.hp / curMax;
+            u.maxHp = origMax; u.max = origMax;
+            u.hp = Math.max(1, Math.round(origMax * hpRatio));
+            u._ultHpBoosted = false;
+            u._ultOrigMaxHp = undefined;
+            u._ultHpUntil = undefined;
+            renderUnitRows();
+          }
+        }
+      });
+    }
+    if(st._talismanFx && st._talismanFx.until>0){ st._talismanFx.until = Math.max(0, st._talismanFx.until-dt); if(st._talismanFx.until<=0) st._talismanFx=null; }
+    // 十二符咒 · 灼烧DoT（龙焰龙符）：每秒扣 burnDmg 点
+    if(st.burnUntil>0 && st.burnDmg>0 && battle && !battle.over){
+      st._burnAcc = (st._burnAcc||0) + dt;
+      while(st._burnAcc >= 60){
+        st._burnAcc -= 60;
+        var bList = s==='you'? battle.you : battle.foe;
+        var bIdx = s==='you'? battle.yi : battle.fi;
+        if(bList[bIdx] && bList[bIdx].alive){
+          bList[bIdx].hp = Math.max(0, bList[bIdx].hp - st.burnDmg);
+          try{ var cl=document.getElementById('clash'); if(cl){ cl.textContent='🔥-'+st.burnDmg; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); } }catch(_){}
+          renderUnitRows();
+          if(bList[bIdx].hp<=0){ bList[bIdx].alive=false; if(s==='you'){ battle.yi=battle.you.findIndex(x=>x.alive); }else{ battle.fi=battle.foe.findIndex(x=>x.alive); } if(battle.yi<0){ endBattle(false); } if(battle.fi<0){ endBattle(true); } setTimeout(function(){ initPhysics(); renderUnitRows(); },500); }
+        }
+      }
+    }
+    // 十二符咒 · 持续回血（马愈伤符）：每秒回 regenAmt 点
+    if(st.regenUntil>0 && st.regenAmt>0 && battle && !battle.over){
+      st._regenAcc = (st._regenAcc||0) + dt;
+      while(st._regenAcc >= 60){
+        st._regenAcc -= 60;
+        var rList = s==='you'? battle.you : battle.foe;
+        var rIdx = s==='you'? battle.yi : battle.fi;
+        if(rList[rIdx] && rList[rIdx].alive){
+          var mx = rList[rIdx].maxHp || rList[rIdx].max || 100;
+          rList[rIdx].hp = Math.min(mx, rList[rIdx].hp + st.regenAmt);
+          try{ var cl2=document.getElementById('clash'); if(cl2){ cl2.textContent='💚+'+st.regenAmt; cl2.classList.remove('show'); void cl2.offsetWidth; cl2.classList.add('show'); } }catch(_){}
+          renderUnitRows();
+        }
+      }
+    }
     if(st.borrowUntil<=0 && st.borrowBackup){
       var pc = findPhysBySide(s);
       if(pc){ pc.skills = st.borrowBackup; }
@@ -3634,6 +3736,244 @@ function bssAtkMul(side, baseDmg){
   return Math.max(1, Math.round(d));
 }
 function bssHpLock(side){ return _bss && _bss[side] && _bss[side].hpLockUntil>0; }
+// ===== 十二符咒 · BSS辅助函数 =====
+function bssInvis(side){ return _bss && _bss[side] && _bss[side].invisUntil>0; }
+function bssTransform(side){ return _bss && _bss[side] && _bss[side].transformUntil>0; }
+function bssFloat(side){ return _bss && _bss[side] && _bss[side].floatUntil>0; }
+function bssSoul(side){ return _bss && _bss[side] && _bss[side].soulUntil>0; }
+function bssSpdMul(side){ return (_bss && _bss[side] && _bss[side].spdMulUntil>0) ? (_bss[side].spdMul||1.0) : 1.0; }
+function bssCdMul(side){ return (_bss && _bss[side] && _bss[side].cdMulUntil>0) ? (_bss[side].cdMul||1.0) : 1.0; }
+// 闪避判定（蛇符咒被动 + 猴符咒被动）
+function bssDodgeRoll(side){
+  if(!_bss || !_bss[side]) return false;
+  var pc = findPhysBySide(side);
+  var chance = (pc && pc.unit && pc.unit._passiveDodge) ? pc.unit._passiveDodge : 0;
+  chance += (pc && pc.unit && pc.unit._passiveMonkeyDodge) ? pc.unit._passiveMonkeyDodge : 0;
+  return chance>0 && Math.random() < chance;
+}
+// 伤害减免（鸡符咒被动）
+function bssDmgReduce(side, dmg){
+  var pc = findPhysBySide(side);
+  var red = (pc && pc.unit && pc.unit._passiveDmgReduce) ? pc.unit._passiveDmgReduce : 0;
+  return Math.max(1, Math.round(dmg * (1 - red)));
+}
+
+/* ========================================================================
+   十二符咒 · 主动技能系统（战斗中点击符咒触发）
+   每个符咒 idx 对应 TALISMANS 数组索引
+   调用方式：activateTalismanSkill(idx, side)
+   ======================================================================== */
+function activateTalismanSkill(idx, side){
+  if(!battle || battle.over) return false;
+  if(!_bss) return false;
+  var other = side==='you' ? 'foe' : 'you';
+  var st = _bss[side];
+  var ot = _bss[other];
+  var t = TALISMANS[idx];
+  var nm = t ? (t.zodiac+'·'+t.name) : ('符咒#'+idx);
+
+  switch(idx){
+    // ① 鼠·生命符：复活一名阵亡队友（50%HP），无阵亡则回当前单位30%HP
+    case 0: {
+      var list = side==='you'? battle.you : battle.foe;
+      var deadIdx = list.findIndex(function(u){ return !u.alive; });
+      if(deadIdx>=0){
+        var mx = list[deadIdx].maxHp || list[deadIdx].max || 100;
+        list[deadIdx].hp = Math.round(mx * 0.5);
+        list[deadIdx].alive = true;
+        toast(nm+' · 复活 '+list[deadIdx].member.n+'（50%HP）');
+      } else {
+        var ci = side==='you'? battle.yi : battle.fi;
+        var mx2 = list[ci].maxHp || list[ci].max || 100;
+        list[ci].hp = Math.min(mx2, list[ci].hp + Math.round(mx2*0.3));
+        toast(nm+' · 恢复 '+list[ci].member.n+' 30%HP');
+      }
+      renderUnitRows();
+      break;
+    }
+    // ② 牛·巨力符：攻击力×2.5，持续15秒
+    case 1: {
+      st.atkMul = 2.5; st.atkMulUntil = 15*60;
+      st._talismanFx = {idx:idx, nm:nm, until:15*60};
+      toast(nm+' · 攻击力×2.5（15s）');
+      break;
+    }
+    // ③ 虎·阴阳符：阴阳平衡·攻击×1.6 + 受伤×0.6，持续20秒
+    case 2: {
+      st.atkMul = 1.6; st.atkMulUntil = 20*60;
+      st._tigerBalance = 0.6; st._tigerBalanceUntil = 20*60;
+      st._talismanFx = {idx:idx, nm:nm, until:20*60};
+      toast(nm+' · 阴阳平衡（攻击×1.6 受伤×0.6，20s）');
+      break;
+    }
+    // ④ 兔·神速符：速度×2.5 + 技能冷却×0.5，持续12秒
+    case 3: {
+      st.spdMul = 2.5; st.spdMulUntil = 12*60;
+      st.cdMul = 0.5; st.cdMulUntil = 12*60;
+      st._talismanFx = {idx:idx, nm:nm, until:12*60};
+      toast(nm+' · 神速（速度×2.5 冷却减半，12s）');
+      break;
+    }
+    // ⑤ 龙·焰龙符：40点即时伤害 + 灼烧DoT（6点/秒×8秒）
+    case 4: {
+      hit(other, 40, side);
+      ot.burnDmg = 6; ot.burnUntil = 8*60; ot._burnAcc = 0;
+      st._talismanFx = {idx:idx, nm:nm, until:8*60};
+      toast(nm+' · 40伤害 + 灼烧6/s（8s）');
+      break;
+    }
+    // ⑥ 蛇·隐遁符：隐身12秒（敌方无法攻击/碰撞伤害）
+    case 5: {
+      st.invisUntil = 12*60;
+      st._talismanFx = {idx:idx, nm:nm, until:12*60};
+      // 视觉：球体半透明
+      try{ var pc=findPhysBySide(side); if(pc&&pc.el){ pc.el.style.opacity='0.35'; pc.el.style.transition='opacity .5s'; } }catch(_){}
+      toast(nm+' · 隐身（12s，敌方无法攻击）');
+      break;
+    }
+    // ⑦ 马·愈伤符：全体恢复35HP + 清除负面状态
+    case 6: {
+      var list2 = side==='you'? battle.you : battle.foe;
+      list2.forEach(function(u){
+        if(u.alive){
+          var mx3 = u.maxHp || u.max || 100;
+          u.hp = Math.min(mx3, u.hp + 35);
+        }
+      });
+      // 清除负面状态
+      ot.burnUntil=0; ot.burnDmg=0; ot.transformUntil=0;
+      st.burnUntil=0; st.burnDmg=0; st.transformUntil=0;
+      renderUnitRows();
+      st._talismanFx = {idx:idx, nm:nm, until:60};
+      toast(nm+' · 全体+35HP + 净化');
+      break;
+    }
+    // ⑧ 羊·离魂符：灵魂出窍·无敌8秒（无法攻击）+ 敌方25点精神伤害
+    case 7: {
+      st.soulUntil = 8*60;
+      hit(other, 25, side);
+      st._talismanFx = {idx:idx, nm:nm, until:8*60};
+      toast(nm+' · 灵魂出窍（无敌8s + 25精神伤害）');
+      break;
+    }
+    // ⑨ 猴·变幻符：敌方变形10秒（攻击=1，速度-50%）
+    case 8: {
+      ot.transformUntil = 10*60;
+      ot.atkPinUntil = 10*60;  // 复用压1机制
+      ot.spdMul = 0.5; ot.spdMulUntil = 10*60;
+      st._talismanFx = {idx:idx, nm:nm, until:10*60};
+      toast(nm+' · 敌方变形（攻击=1 速度-50%，10s）');
+      break;
+    }
+    // ⑩ 鸡·凌空符：漂浮12秒（免疫碰撞伤害，速度+40%）
+    case 9: {
+      st.floatUntil = 12*60;
+      st.spdMul = 1.4; st.spdMulUntil = 12*60;
+      st._talismanFx = {idx:idx, nm:nm, until:12*60};
+      toast(nm+' · 凌空漂浮（免疫碰撞 速度+40%，12s）');
+      break;
+    }
+    // ⑪ 狗·永生符：HP锁定12秒 + 恢复25HP
+    case 10: {
+      st.hpLockUntil = 12*60;
+      var list3 = side==='you'? battle.you : battle.foe;
+      var ci3 = side==='you'? battle.yi : battle.fi;
+      if(list3[ci3] && list3[ci3].alive){
+        var mx4 = list3[ci3].maxHp || list3[ci3].max || 100;
+        list3[ci3].hp = Math.min(mx4, list3[ci3].hp + 25);
+      }
+      renderUnitRows();
+      st._talismanFx = {idx:idx, nm:nm, until:12*60};
+      toast(nm+' · 永生（HP锁定12s + 25HP）');
+      break;
+    }
+    // ⑫ 猪·镭射符：55点穿透伤害（无视锁血/防御）
+    case 11: {
+      // 穿透：直接扣血，绕过bssAtkMul和bssHpLock
+      var tList = other==='you'? battle.you : battle.foe;
+      var tIdx = other==='you'? battle.yi : battle.fi;
+      if(tList[tIdx] && tList[tIdx].alive){
+        tList[tIdx].hp = Math.max(0, tList[tIdx].hp - 55);
+        try{ var cl=document.getElementById('clash'); if(cl){ cl.textContent='⚡穿透-55'; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); } }catch(_){}
+        beep(side==='you'?980:420);
+        renderUnitRows();
+        if(tList[tIdx].hp<=0){
+          tList[tIdx].alive=false;
+          if(other==='you'){ battle.yi=battle.you.findIndex(x=>x.alive); }else{ battle.fi=battle.foe.findIndex(x=>x.alive); }
+          if(battle.yi<0){ endBattle(false); } if(battle.fi<0){ endBattle(true); }
+          setTimeout(function(){ initPhysics(); renderUnitRows(); },500);
+        }
+      }
+      st._talismanFx = {idx:idx, nm:nm, until:60};
+      toast(nm+' · 镭射穿透55伤害');
+      break;
+    }
+    default: return false;
+  }
+  beep(side==='you'?780:460);
+  setTimeout(function(){ beep(side==='you'?980:340); },120);
+  return true;
+}
+
+/* ========================================================================
+   十二符咒 · 被动buff系统（主页激活符咒后带入战斗）
+   战斗开始时调用 applyTalismanPassives(side)，读取 slotOrder 中激活的符咒
+   被动buff存在单位对象上（_passiveXxx），替补上场也继承
+   ======================================================================== */
+function applyTalismanPassives(side){
+  if(typeof slotOrder==='undefined' || !slotOrder || !slotOrder.length) return;
+  if(!battle) return;
+  var list = side==='you'? battle.you : battle.foe;
+  // 只对我方应用被动（主页激活的是我方符咒）
+  if(side!=='you') return;
+
+  slotOrder.forEach(function(zId){
+    if(zId==null || zId===undefined) return;
+    list.forEach(function(u){
+      switch(zId){
+        case 0: // 鼠·生命符被动：首次阵亡自动复活30%HP
+          u._passiveRevive = true; break;
+        case 1: // 牛·巨力符被动：攻击+25%
+          u._passiveAtkBonus = (u._passiveAtkBonus||0) + 0.25; break;
+        case 2: // 虎·阴阳符被动：致命伤害时1HP存活+攻击×1.5（每场限1次）
+          u._passiveTigerBalance = true; break;
+        case 3: // 兔·神速符被动：速度+20%，冷却-15%
+          u._passiveSpdBonus = (u._passiveSpdBonus||0) + 0.20;
+          u._passiveCdBonus = (u._passiveCdBonus||0) + 0.15; break;
+        case 4: // 龙·焰龙符被动：攻击附加15%火焰伤害
+          u._passiveFireBonus = (u._passiveFireBonus||0) + 0.15; break;
+        case 5: // 蛇·隐遁符被动：20%闪避
+          u._passiveDodge = (u._passiveDodge||0) + 0.20; break;
+        case 6: // 马·愈伤符被动：每秒回1.5HP
+          u._passiveRegen = (u._passiveRegen||0) + 1.5; break;
+        case 7: // 羊·离魂符被动：阵亡后灵魂继续战斗4秒（无敌）
+          u._passiveSheepSoul = true; break;
+        case 8: // 猴·变幻符被动：15%概率变形免疫伤害
+          u._passiveMonkeyDodge = (u._passiveMonkeyDodge||0) + 0.15; break;
+        case 9: // 鸡·凌空符被动：伤害-15%
+          u._passiveDmgReduce = (u._passiveDmgReduce||0) + 0.15; break;
+        case 10: // 狗·永生符被动：最大HP+20%
+          u._passiveMaxHp = (u._passiveMaxHp||0) + 0.20; break;
+        case 11: // 猪·镭射符被动：10%概率镭射追加12点
+          u._passiveLaserChance = (u._passiveLaserChance||0) + 0.10; break;
+      }
+    });
+  });
+
+  // 应用狗符咒被动：最大HP+20%（同时回满增加的部分）
+  list.forEach(function(u){
+    if(u._passiveMaxHp && u._passiveMaxHp>0){
+      var oldMax = u.maxHp || u.max || 100;
+      var newMax = Math.round(oldMax * (1 + u._passiveMaxHp));
+      u.maxHp = newMax; u.max = newMax;
+      u.hp = Math.min(newMax, u.hp + (newMax - oldMax));
+    }
+    // 应用牛符咒被动：基础攻击力+25%
+    if(u._passiveAtkBonus && u._passiveAtkBonus>0){
+      u.atk = Math.round(u.atk * (1 + u._passiveAtkBonus));
+    }
+  });
+}
 function applySpeedLabels(){
   try{
     // 左箭头显示当前慢速档显示（=curSpeed）；右箭头同理（两侧按钮的标签都显示同一个当前速度，用户更直观）
@@ -3689,7 +4029,7 @@ function spawnLZChar(owner, charText, damage, fxTag){
     arena.appendChild(d);
     // 起始位置：owner 中心
     var x = owner.x, y = owner.y;
-    _projs.push({ side: owner.side, targetSide: targetSide, text: charText,
+    _projs.push({ side: owner.side, targetSide: targetSide, text: charText, isLZ5: true, showDialog: (charText==='妖'),
                   x: x, y: y, vx: 0, vy: 0, target: target, el: d, dmg: damage||4 });
   }catch(e){}
 }
@@ -3750,7 +4090,21 @@ function tickProjs(dt){
       var hitD = tgt.r + 10;
       if(dd <= hitD){
         if(tgt.side){ hit(tgt.side, Math.max(1, p.dmg||4), p.side); }
-        if(tgt.el){ tgt.el.classList.remove('hit-flash'); void tgt.el.offsetWidth; tgt.el.classList.add('hit-flash'); }
+        // ⭐ 老爹七字真言命中：只有第1个字（妖）命中时显示敌人对话框，5选1，显示3秒
+        if(p.isLZ5 && p.showDialog && tgt.el){
+          try{
+            var FOE_QUOTES = [
+              '不好，大法师发力了。',
+              '我就不离开，看你咋办。',
+              '不好老爹会驱魔法。',
+              '老爹饶命啊。',
+              '我怕你个啥 驱魔而已。'
+            ];
+            var fq = FOE_QUOTES[Math.floor(Math.random()*FOE_QUOTES.length)];
+            showSkillDialog(tgt, fq, 'foe');
+          }catch(_){}
+        }
+        if(tgt.el){ var _now1=Date.now(); if(!tgt.el._lastHitFlash || _now1-tgt.el._lastHitFlash>600){ tgt.el._lastHitFlash=_now1; tgt.el.classList.remove('hit-flash'); void tgt.el.offsetWidth; tgt.el.classList.add('hit-flash'); } }
         if(p.el && p.el.parentNode) p.el.parentNode.removeChild(p.el);
         continue; // 不再加入下一帧
       }
@@ -3948,6 +4302,9 @@ function makePhysCircle(side,unit,x,y){
   document.getElementById('arena').appendChild(el);
   // ==== 用户再次要求：球体运动更正常/更慢，战斗不要过快结束；每约3秒放一次技能 ====
   var spd = 0.55 * (unit.speedMult || 1); // 再次降速：相对上一轮再慢约 33%
+  // 十二符咒 · 兔被动：速度+20%
+  if(unit._passiveSpdBonus && unit._passiveSpdBonus>0){ spd = spd * (1 + unit._passiveSpdBonus); }
+  var baseSpd = spd; // 记录基础速度，供physStep动态调整（兔主动/猴变形/鸡漂浮）
   var ang = Math.random() * Math.PI * 2;
   var skills = unit.skills || [
     {nm: '第一式', desc: '快速出拳', type: 'atk', fx: 'fire'}
@@ -3996,6 +4353,7 @@ function makePhysCircle(side,unit,x,y){
   return {
     side: side, unit: unit, el: el, r: r, x: x, y: y,
     vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
+    baseSpd: baseSpd,  // 十二符咒：基础速度大小，供physStep动态调整
     atk: unit.atk || 5,
     randCD:   160 + Math.random() * 180,
     followCD: 260 + Math.random() * 220,
@@ -4084,8 +4442,10 @@ function physStep(dt){
     }
 
     // 速度归一化：限速防止越跑越快
+    // 十二符咒：应用动态速度倍率（兔主动×2.5 / 猴变形×0.5 / 鸡漂浮×1.4）
     var sp=Math.sqrt(c.vx*c.vx+c.vy*c.vy);
-    var tgt=spBase*(c.unit.speedMult||1);
+    var tgtBase = c.baseSpd || (spBase*(c.unit.speedMult||1));
+    var tgt = tgtBase * bssSpdMul(c.side);
     if(sp>0){c.vx=c.vx/sp*tgt;c.vy=c.vy/sp*tgt;}
   }
 
@@ -4147,13 +4507,15 @@ function physStep(dt){
         }
       }
       // ⭐ BSS 门禁：物理碰撞伤害走攻击倍率（×5 或 压成1）/ HP锁
-      if(_dmgCD[a.side]<=0 && !aFz){
+      // 十二符咒：漂浮（鸡）/ 隐身（蛇）/ 灵魂（羊）状态免疫碰撞伤害
+      var aFloat = bssFloat(a.side), bFloat = bssFloat(b.side);
+      if(_dmgCD[a.side]<=0 && !aFz && !bFloat){
         var dA = Math.max(1, Math.round((a.atk*0.40)+Math.random()*1.5));
         dA = bssAtkMul('you', dA);
         hit('foe', dA, 'you');
         _dmgCD[a.side]=56;
       }
-      if(_dmgCD[b.side]<=0 && !bFz){
+      if(_dmgCD[b.side]<=0 && !bFz && !aFloat){
         var dB = Math.max(1, Math.round((b.atk*0.40)+Math.random()*1.5));
         dB = bssAtkMul('foe', dB);
         hit('you', dB, 'foe');
@@ -4173,7 +4535,13 @@ function physStep(dt){
       // --- 未施放：每技能独立推进 CD ---
       var readyList = [];
       for(var kk=0; kk<nSk; kk++){
-        c.skCDs[kk] = Math.max(0, (c.skCDs[kk]||0) - dt);
+        // 十二符咒：兔符咒主动冷却倍率（cdMul=0.5→冷却减半）+ 被动冷却缩减
+        var cdFactor = bssCdMul(c.side);
+        if(c.unit && c.unit._passiveCdBonus && c.unit._passiveCdBonus>0){
+          cdFactor = cdFactor * (1 - c.unit._passiveCdBonus);
+        }
+        var cdDec = dt / Math.max(0.1, cdFactor);
+        c.skCDs[kk] = Math.max(0, (c.skCDs[kk]||0) - cdDec);
         if(c.skCDs[kk]<=0) readyList.push(kk);
       }
       // ⭐ BSS 技能禁放门禁：冻结/技能剥夺/咒语升级版 期间 → 清空 readyList
@@ -4196,6 +4564,17 @@ function physStep(dt){
         // 老爹·七字真言：1 秒发射 1 个字
         if(sk && sk.custom==='LZ5'){
           c._lzEmitTick = 60;        // 立即发射第 1 个字（妖），之后每累积 1 秒再喷下一字
+          // ⭐ 老爹口头禅对话框：随机4选1，显示3秒
+          try{
+            var UNCLE_QUOTES = [
+              '妖魔鬼怪快离开，诸邪退散。',
+              '看老爹的魔法',
+              '哎呀，还有一件事！',
+              '看我七字真言灭了你'
+            ];
+            var quote = UNCLE_QUOTES[Math.floor(Math.random()*UNCLE_QUOTES.length)];
+            showSkillDialog(c, quote, 'self');
+          }catch(_){}
         } else {
           c._lzEmitTick = 999999;    // 非 LZ5 技能不发射字
         }
@@ -4272,7 +4651,956 @@ function physStep(dt){
   tickProjs(dt);
   // ==== 6) 道具系统推进（全局 CD / 飞行字 / 外环 / 状态 / 敌方 3 秒回应）====
   tickPropSystem(dt);
+  // ==== 7) 龙叔×圣主 相遇对话模式 ====
+  tickBattleDialog(dt);
 }
+
+
+/* ========== 角色后台台词库（每角色30条） ========== */
+const DIALOGUE_LIBRARY = {
+  "龙叔": [
+    "倒霉倒霉倒霉，又碰上麻烦事了。",
+    "又遇上你们这些家伙，这下可不好办。",
+    "正义不会向邪恶低头。",
+    "我不会让你的阴谋得逞。",
+    "符咒的力量不该被滥用。",
+    "赶快放弃你的计划吧。",
+    "我们不会任由你肆意破坏。",
+    "不管你有多强大，我都会阻止你。",
+    "魔法的力量不应该用来作恶。",
+    "不要妄想可以随意抢夺符咒。",
+    "十三区已经注意到你的行动。",
+    "武力解决不是最好的选择。",
+    "你的诡计骗不了我们。",
+    "我们不会向恶魔的力量屈服。",
+    "地狱才是恶魔该待的归宿。",
+    "再强大的魔法也战胜不了人心。",
+    "收手吧，继续下去只会自取灭亡。",
+    "我只是个考古学家，却总卷入战斗。",
+    "别以为力量就可以为所欲为。",
+    "不管是符咒还是魔气，都不能祸害人间。",
+    "你的野心注定不会实现。",
+    "我不会让你伤害身边的人。",
+    "就算敌众我寡，我也不会退缩。",
+    "黑暗的力量终有被击溃的一天。",
+    "不要继续被力量蒙蔽双眼。",
+    "我们会阻止你所有的阴谋。",
+    "真正的强大不是靠魔法与符咒。",
+    "你以为这样就可以掌控一切吗。",
+    "快停下你的破坏行为。",
+    "这场闹剧，该到此结束了。"
+  ],
+  "小玉": [
+    "龙小组出动，该收拾坏人了！",
+    "别小看我，我可不会拖后腿。",
+    "你的把戏骗不了我。",
+    "我们一定会阻止你的恶行。",
+    "魔法的力量不能用来作恶。",
+    "来吧，看我们怎么打败你。",
+    "邪恶终究是会失败的。",
+    "十三区不会放过你的。",
+    "不要觉得小孩子就好欺负。",
+    "我见过比你更可怕的魔法。",
+    "黑影兵团也不是没有办法对付。",
+    "符咒的魔力应该用来保护别人。",
+    "龙叔，我们一起把他拿下。",
+    "你的计划早就被我们看穿。",
+    "就算是恶魔，我也不会害怕。",
+    "别以为可以轻易击败龙小组。",
+    "黑暗力量迷惑不了我的心智。",
+    "我可是龙小组的队长。",
+    "你的好日子已经到头了。",
+    "休想把灾难带到这个世界。",
+    "面具的魔力不是你作恶的资本。",
+    "我们会把你重新封印回去。",
+    "不要低估普通人的勇气。",
+    "再多诡计也救不了你。",
+    "正义一定会取得胜利。",
+    "我已经见识过太多黑暗魔法。",
+    "你不会得逞的，我敢保证。",
+    "快快放弃，不要继续顽抗。",
+    "就算没有符咒，我们也能赢。",
+    "今天就要终结你的阴谋。"
+  ],
+  "老爹": [
+    "要用魔法打败魔法！",
+    "还有一件事，不要小看黑气的力量。",
+    "妖魔鬼怪快离开，邪恶退散。",
+    "古老的法术，早已看透你的诡计。",
+    "黑暗魔法，终究会被光明压制。",
+    "年轻人，不要被力量迷惑心智。",
+    "恶魔的力量，终将被封印。",
+    "魔力不是用来搞破坏的。",
+    "老爹有不祥的预感，大事不妙。",
+    "永远不要质疑老爹说的话。",
+    "我们必须回去翻阅古籍做研究。",
+    "热茶，热茶可以平复躁动的魔力。",
+    "邪术带来的力量，都是虚幻泡影。",
+    "古老的咒语可以驱散黑暗。",
+    "恶魔终究逃不开封印的宿命。",
+    "沉迷黑气，最后只会毁灭自己。",
+    "魔法有规矩，不可肆意妄为。",
+    "你想和老爹斗斗法术吗。",
+    "黑暗不会永远笼罩大地。",
+    "符咒是古老宝物，不能被抢夺。",
+    "面具的暗影力量十分危险。",
+    "魔气会腐蚀人的内心，千万小心。",
+    "再强大恶魔，也有克制的办法。",
+    "不要贪图不属于自己的魔力。",
+    "古老的智慧可以战胜妖邪。",
+    "你的巫术漏洞百出，不堪一击。",
+    "作恶者，终将受到法术反噬。",
+    "光明法术不会向黑暗低头。",
+    "该是驱逐这些邪恶的时候了。",
+    "魔法的真谛不是破坏，是守护。"
+  ],
+  "特鲁": [
+    "我不再为黑暗效力。",
+    "我现在站在正义这边。",
+    "大块头也懂得分辨善恶。",
+    "我不会再帮你们抢夺符咒。",
+    "我要弥补过去犯下的过错。",
+    "不要逼我出手对付你们。",
+    "力量应当用来保护别人。",
+    "过去的我已经不复存在。",
+    "我不愿再听从邪恶的命令。",
+    "瓦龙的财富诱惑不了我。",
+    "老爹教会我分辨是非对错。",
+    "体型庞大，内心也可以善良。",
+    "我不会再做伤天害理的事。",
+    "就算对手强大，我也会战斗。",
+    "我愿意承担过去犯下的错误。",
+    "不要拿旧主身份来胁迫我。",
+    "守护身边的人，是我的责任。",
+    "黑暗的道路，我已经远离。",
+    "武力不是用来掠夺与作恶。",
+    "我可以成为龙小组可靠战力。",
+    "不要再妄想拉拢我回到黑暗。",
+    "就算身躯魁梧，心中也有良知。",
+    "我会对抗所有作恶的家伙。",
+    "金钱权势，不值得出卖良心。",
+    "面对恶魔，我也不会后退半步。",
+    "我要为曾经的行为赎罪。",
+    "符咒不该落入恶人手中。",
+    "不要小看改过自新的人。",
+    "我会站在正义一方战斗到底。",
+    "邪恶的命令，我拒绝服从。"
+  ],
+  "牛战士": [
+    "牛战士从不摘下他的面具！",
+    "真正的力量来自内心。",
+    "我要捍卫正义，打倒恶人。",
+    "邪恶，接下我的拳头！",
+    "强者应当守护弱小。",
+    "你的狂妄到此为止。",
+    "我不会畏惧任何对手。",
+    "荣耀属于正义的一方。",
+    "面具代表我的尊严与信仰。",
+    "蛮力不能代表真正的强大。",
+    "欺负弱者，是最为可耻的。",
+    "来吧，让我们堂堂正正对决。",
+    "就算敌人拥有魔法，我也不怕。",
+    "战士的荣耀不容践踏。",
+    "我不会靠魔法赢得胜利。",
+    "面对恶魔，我的拳头绝不留情。",
+    "不要用诡计来玷污战斗。",
+    "正义的战士永不退缩。",
+    "力量要用来守护无辜百姓。",
+    "你可以打倒我的身体，打不败意志。",
+    "阴谋诡计赢不了真正勇士。",
+    "我会捍卫属于战士的荣耀。",
+    "不要妄想吓退牛战士。",
+    "符咒的力量也不能扭曲正义。",
+    "敢于直面一切强大的敌人。",
+    "真正强者，不会欺凌弱小。",
+    "我将击溃眼前一切黑暗。",
+    "诡计再多，也敌不过勇气。",
+    "面具之下是不屈的灵魂。",
+    "今天我就要将邪恶击溃。"
+  ],
+  "小蛇": [
+    "过去我是盗贼，如今我守护正义。",
+    "身手，可不只有你才有。",
+    "你的计划不会顺利得逞。",
+    "诡计在我们面前没有用处。",
+    "我很清楚坏人的手段。",
+    "别妄想可以轻易战胜我们。",
+    "再狡猾的计谋也会败露。",
+    "该是结束这场闹剧的时候。",
+    "我精通各种潜行与逃脱技巧。",
+    "不要想用阴谋蒙骗我的眼睛。",
+    "盗贼的本领，如今用来守护正义。",
+    "你的陷阱，我一眼就能看穿。",
+    "就算没有武器，我也可以战斗。",
+    "再精密的计划也会存在破绽。",
+    "我见过太多尔虞我诈的阴谋。",
+    "不要觉得女性就容易对付。",
+    "你的阴谋瞒不过我的观察。",
+    "我不会再为私欲去偷窃掠夺。",
+    "陷阱和诡计对我很难生效。",
+    "想要耍花招，劝你趁早放弃。",
+    "速度与技巧，就是我的武器。",
+    "黑暗的伎俩，我早已见识过。",
+    "再狡猾的敌人也会露出马脚。",
+    "我会阻止你所有卑劣的勾当。",
+    "不要低估一个改过之人的决心。",
+    "再多伪装，也掩盖不住邪恶。",
+    "我擅长识破敌人的小把戏。",
+    "正邪之间，我选择站在光明。",
+    "你的阴谋逃不出我的双眼。",
+    "狡诈不能让你取得胜利。"
+  ],
+  "布莱克": [
+    "十三区，现在正式逮捕你。",
+    "停止你的破坏行为。",
+    "法律不会饶恕你的所作所为。",
+    "我们已经掌握你的全部线索。",
+    "不要负隅顽抗，束手就擒。",
+    "魔法犯罪，也逃不过制裁。",
+    "十三区会守护世间安宁。",
+    "你的好日子已经到头了。",
+    "不管人类还是恶魔，都要受约束。",
+    "十三区监控着所有魔法异动。",
+    "不要妄想逃离十三区的追捕。",
+    "就算拥有魔力，也不能肆意作乱。",
+    "我们已经做好万全的准备。",
+    "你的所有行动都已经被记录。",
+    "对抗十三区，就是对抗秩序。",
+    "放弃抵抗，减少不必要伤亡。",
+    "魔法犯罪也必须接受法律审判。",
+    "十三区不会放任恶魔危害人间。",
+    "我们会没收所有危险魔法器物。",
+    "不要低估十三区的实力。",
+    "无论你拥有何种魔力，都要归案。",
+    "秩序不会向黑暗魔力妥协。",
+    "你的犯罪行动到此为止。",
+    "十三区会保护普通民众安全。",
+    "不要试图和官方力量对抗。",
+    "符咒、魔气全部要妥善管控。",
+    "顽抗只会加重你的罪责。",
+    "我们追踪你很久了，逃不掉。",
+    "就算是恶魔，也不能肆意破坏。",
+    "现在放下力量，接受逮捕。"
+  ],
+  "瓦龙": [
+    "把十二符咒交出来，一切好说。",
+    "金钱与力量，才是世间真理。",
+    "成龙，你又来坏我的好事。",
+    "圣主许诺给我的财富在哪里。",
+    "特鲁，你竟敢背叛我。",
+    "只要拿到符咒，天下就是我的。",
+    "少来跟我讲什么大道理。",
+    "手下，给我拿下他们！",
+    "财富和权力，才是我追求的目标。",
+    "不要拿正义来教训我。",
+    "黑手帮想要的东西，势在必得。",
+    "圣主答应赐予我无尽的财宝。",
+    "成龙总是一次次破坏我的计划。",
+    "只要拿到符咒，金钱唾手可得。",
+    "不听话的手下，没有存在价值。",
+    "魔法宝物，理应归强者所有。",
+    "我不在乎世间所谓的善恶道义。",
+    "快把符咒交出，不要自讨苦吃。",
+    "我的手下个个身手不凡。",
+    "命运本该让我坐拥财富权势。",
+    "圣主如果不守承诺，我也不会顺从。",
+    "不要阻碍我获取财富的道路。",
+    "为了财宝，我可以不择手段。",
+    "真是一群碍事的家伙。",
+    "就算借助恶魔力量，我也要成功。",
+    "我会夺回属于我的一切利益。",
+    "理想道义不能填饱人的肚子。",
+    "给我抓住他们，不要手下留情。",
+    "我要掌控符咒，改变我的命运。",
+    "谁阻拦我攫取财富，就是敌人。"
+  ],
+  "黑虎阿福": [
+    "看我的黑虎掏心！",
+    "乌鸦坐飞机！接招！",
+    "我的招式，你抵挡不住。",
+    "武术的力量将碾压你们。",
+    "敢阻拦瓦龙大人，就是我的敌人。",
+    "尝尝我千变万化的绝技。",
+    "不要小看武者的怒火。",
+    "今天，我就要把你们打倒。",
+    "泰山压顶，吃我一招！",
+    "莲花飘，腾空出击。",
+    "蝎子掌，直击你的要害。",
+    "螳螂拳，看我快速进攻。",
+    "二龙戏珠，双重攻势袭来。",
+    "弗拉明戈舞步，迷惑你的视线。",
+    "猫落地，轻盈化解你的攻势。",
+    "武术的奥义，不是花拳绣腿。",
+    "敢于和我交手，你要有觉悟。",
+    "我的武艺，久经千锤百炼。",
+    "不要妄想靠小聪明战胜武者。",
+    "瓦龙大人的命令，我绝对服从。",
+    "对手越强，越能激发我的斗志。",
+    "拳脚之下，一切诡计都会粉碎。",
+    "接下我全力一击，看你如何抵挡。",
+    "我精通世间各式各样的格斗术。",
+    "不要以为耍滑头就可以躲开我。",
+    "武术强者，不屑使用卑劣诡计。",
+    "战斗，就是证明力量最好方式。",
+    "你的功夫，还远远不够火候。",
+    "无论对手多少，我都不会畏惧。",
+    "就让我的拳脚终结这场对峙。"
+  ],
+  "阿奋": [
+    "又要跟成龙打架，真麻烦。",
+    "赶紧拿到符咒，早点收工。",
+    "我们只是拿钱办事而已。",
+    "别挡路，不然我们就要动手。",
+    "为什么每次任务都这么艰难。",
+    "乖乖交出东西，免得挨打。",
+    "瓦龙吩咐，我们只能照做。",
+    "希望这次可以顺利拿到报酬。",
+    "说实话，我并不想大打出手。",
+    "成龙怎么每次都刚好出现。",
+    "干完这一单，我就想好好休息。",
+    "我们也不想惹上太多麻烦。",
+    "识相一点，大家都省事。",
+    "每次行动总会冒出意外状况。",
+    "拿人钱财，替人完成任务。",
+    "最好不要逼我们真的动手。",
+    "我只想安安稳稳赚一笔酬劳。",
+    "为什么对手总是这么难对付。",
+    "符咒到手，我们立刻就撤退。",
+    "我可不想受很重的伤。",
+    "瓦龙的命令，我们不能违抗。",
+    "要是任务简单一点该多好。",
+    "不要逼我们采取强硬手段。",
+    "真不想和成龙这种人硬碰硬。",
+    "只要完成任务就可以拿到钱。",
+    "事态不要闹得太大就好了。",
+    "每次行动都状况百出。",
+    "我们只是执行者，不是主谋。",
+    "快点交出符咒，少折腾我们。",
+    "但愿这次可以平安收工回家。"
+  ],
+  "拉苏": [
+    "我只想安安稳稳赚一笔。",
+    "为什么总是碰到成龙捣乱。",
+    "别逼我们动粗，识相点。",
+    "符咒到手，我们就走人。",
+    "老实说，我并不想大打出手。",
+    "不要反抗，会少受点苦头。",
+    "什么时候我们才能顺利完工。",
+    "服从瓦龙，这就是我的工作。",
+    "我只想安稳拿到我的薪水。",
+    "每回都遇上一堆棘手麻烦。",
+    "不要把事情搞得不可收拾。",
+    "我们不想伤害无辜的人。",
+    "要是不用打架那就太好了。",
+    "成龙总是破坏我们的计划。",
+    "乖乖配合，大家都不用受伤。",
+    "我只是为了谋生才做这份活。",
+    "任务顺利完成，我就可以享乐。",
+    "真希望少遇到这些厉害对手。",
+    "瓦龙下达指令，我们不得不上。",
+    "不要逼我们出手对付你。",
+    "每次行动都会节外生枝。",
+    "拿到符咒，我们马上离开此地。",
+    "我不想卷入太过凶险的战斗。",
+    "反抗没有任何实际意义。",
+    "混口饭吃，我也身不由己。",
+    "最好不要把警察招惹过来。",
+    "不要继续无谓的抵抗了。",
+    "为什么对手一个比一个难打。",
+    "完成任务，拿到钱万事大吉。",
+    "不要继续对抗，免得皮肉受苦。"
+  ],
+  "周": [
+    "不要做无谓的抵抗。",
+    "我们黑手帮想要的东西，势在必得。",
+    "成龙，你总是阴魂不散。",
+    "违抗我们，不会有好下场。",
+    "速速交出符咒，免得流血。",
+    "不要妄想可以击败我们。",
+    "今天我们一定要完成任务。",
+    "少废话，动手解决他们。",
+    "阻碍黑手帮，就是自寻麻烦。",
+    "不要心存侥幸，你逃不掉。",
+    "成龙屡次破坏我们的行动。",
+    "我们不会轻易放弃目标。",
+    "反抗只会让局面更加糟糕。",
+    "符咒必须落到我们的手中。",
+    "不要低估黑手帮的实力。",
+    "任何阻拦者，都要被清除。",
+    "多说无益，直接动手作战。",
+    "不要以为耍小聪明就能脱身。",
+    "瓦龙的目标，我们必须达成。",
+    "你的反抗改变不了结局。",
+    "不要妄想拖延时间等待援兵。",
+    "这一次，不会再让成龙捣乱。",
+    "识时务者，就该交出宝物。",
+    "所有挡路之人，全部击溃。",
+    "不要抱有不切实际的幻想。",
+    "我们为了目标可以不择手段。",
+    "你的挣扎只是白白消耗体力。",
+    "宝物归我们，其余与你无关。",
+    "不要幻想可以战胜黑手帮。",
+    "今天我们势必将符咒带走。"
+  ],
+  "刀龙": [
+    "黑暗魔法，才是至高无上的力量。",
+    "老爹，好久不见，老对手。",
+    "符咒的魔力，理应归我所有。",
+    "光明的法术，终究不堪一击。",
+    "黑影兵团，听从我的号令。",
+    "古老的黑气，听从我的召唤。",
+    "你的巫术，远远比不上我。",
+    "我将掌控世间所有魔法力量。",
+    "光明法术迂腐又软弱无力。",
+    "黑气蕴含世间最原始的魔力。",
+    "我钻研黑魔法已经度过漫长岁月。",
+    "符咒魔力，本就该属于魔法师。",
+    "老爹那套古老法术不值一提。",
+    "力量，才是魔法世界的真理。",
+    "我可以唤醒沉睡的黑暗力量。",
+    "不要用老旧道义约束强大魔法。",
+    "黑影士兵是我最忠实的仆从。",
+    "光明的时代早就该落幕。",
+    "我要夺取十二符咒全部魔力。",
+    "你的法术，挡不住黑暗洪流。",
+    "沉溺光明，只会变得软弱。",
+    "古老恶魔的力量，我可以驾驭。",
+    "今天，我就要分出法术高下。",
+    "所有魔法宝物，都归我掌控。",
+    "黑暗可以吞噬一切微弱光明。",
+    "不要妄图用正道法术压制我。",
+    "黑气能够改造凡人的肉体。",
+    "你的那些咒语，奈何不了我。",
+    "魔法强者，不需要世俗道义。",
+    "整个世界魔法源头将归我掌管。"
+  ],
+  "塔拉": [
+    "黑影兵团，横扫一切阻碍。",
+    "面具的力量，由我掌控。",
+    "黑暗，将吞噬整片大地。",
+    "凡人，不要妄图对抗黑影。",
+    "戴上面具，你就将臣服于我。",
+    "暗影笼罩之处，光明不复存在。",
+    "反抗我的人，只会坠入黑暗。",
+    "黑影士兵，撕碎眼前的敌人。",
+    "暗影的力量跨越无尽岁月。",
+    "面具就是我力量的来源。",
+    "世间光明，终会被暗影吞没。",
+    "凡人的武器伤害不到黑影战士。",
+    "戴上我的面具，舍弃你的自我。",
+    "黑影兵团，无穷无尽永不枯竭。",
+    "光明在暗影面前不堪一击。",
+    "不要妄想挣脱面具的奴役。",
+    "暗影可以穿梭任何阴影角落。",
+    "所有违抗暗影意志者都将覆灭。",
+    "面具可以唤醒无穷黑影军团。",
+    "黑暗才是万物最初的模样。",
+    "渺小人类，挑战暗影纯属自取灭亡。",
+    "阴影之中，便是我的王国疆域。",
+    "摘下面具，也抹不去暗影烙印。",
+    "黑影战士不知疲惫，永不退缩。",
+    "光芒只能短暂驱散我的暗影。",
+    "不要妄想消灭黑影本源力量。",
+    "戴上面具，你的意志归我所有。",
+    "暗影会渗透世界每一处缝隙。",
+    "反抗暗影，只会被黑暗吞噬。",
+    "这片大地，终将归于黑影统治。"
+  ],
+  "圣主": [
+    "十二符咒，归还于我！",
+    "重获自由，世界将归于我统治。",
+    "成龙，你屡次坏我的大事。",
+    "火焰，焚烧一切阻挡我的人。",
+    "八大恶魔，终将重返人间。",
+    "渺小的人类，竟敢对抗恶魔。",
+    "力量，才是这个世界的法则。",
+    "我的儿子，为何与我作对。",
+    "符咒承载我全部本源魔力。",
+    "被封印的岁月，我一刻未曾遗忘。",
+    "火焰之力可以焚毁一切阻碍。",
+    "凡人的反抗，只是徒劳挣扎。",
+    "只要集齐符咒，我将无人能敌。",
+    "地狱封印困不住我多久。",
+    "人类的武器伤不到恶魔之躯。",
+    "我曾经统治整片古老大地。",
+    "恶魔小龙，你不该背弃你的血脉。",
+    "光明的力量无法彻底消灭我。",
+    "这个世界本该由恶魔来主宰。",
+    "成龙，你一次次破坏我的复兴。",
+    "符咒魔力回归，我将重塑王朝。",
+    "不要以为几道咒语就可以困住我。",
+    "渺小凡人，怎懂得恶魔的伟大。",
+    "地狱的同胞，终会重回世间。",
+    "火焰会烧尽所有反抗我的障碍。",
+    "就算化为雕像，我的意志不灭。",
+    "力量面前，正义只是空谈。",
+    "我会夺回属于我的一切权柄。",
+    "不要妄想永远禁锢住圣主。",
+    "等我复苏，人间将化为炼狱。"
+  ],
+  "咒蓝": [
+    "月亮的力量，听从我的号令。",
+    "天地秩序，由我随意改写。",
+    "渺小生灵，胆敢忤逆恶魔。",
+    "引力，将碾碎你们的躯体。",
+    "我统治过浩瀚的星河。",
+    "神明的封印，终究会被打破。",
+    "世间万物，都要向我俯首。",
+    "光明，无法长久困住恶魔。",
+    "引力可以拉扯世间万物。",
+    "月亮的盈亏，由我随意操控。",
+    "星辰流转，曾遵从我的意志。",
+    "凡人不要妄图挑战天体之力。",
+    "重力可以将一切压为尘埃。",
+    "我俯瞰过无数人间王朝兴衰。",
+    "就算被封印，魔力依旧尚存。",
+    "渺小凡人不懂宇宙的伟力。",
+    "我可以颠倒世间重力法则。",
+    "月亮的力量，足以颠覆大地。",
+    "封印只是暂时囚禁我的身躯。",
+    "所有生灵，都该敬畏月之恶魔。",
+    "引力可以撕裂坚硬的岩石。",
+    "星河浩瀚，曾属于我的疆域。",
+    "不要妄想凡人法术将我镇压。",
+    "重力的枷锁，由我掌控。",
+    "当我归来，天地秩序将重写。",
+    "你们的反抗，改变不了命运。",
+    "仰望月亮，那便是我的力量。",
+    "再坚固壁垒，也扛不住引力。",
+    "岁月封印磨灭不了我的魔力。",
+    "月之恶魔，终将重返世间。"
+  ],
+  "波刚": [
+    "大地群山，都归我掌控。",
+    "我要吞噬眼前所有一切。",
+    "渺小人类，不堪我一击。",
+    "山峦震动，是我降临的征兆。",
+    "美食，就是世间最好的奖赏。",
+    "封印无法永远禁锢我的力量。",
+    "反抗我的人，都将化为尘土。",
+    "大地会见证我的再度崛起。",
+    "山岳的身躯，坚不可摧。",
+    "没有什么东西是我不能吞噬。",
+    "大地震颤，宣告我的苏醒。",
+    "渺小凡人，挡不住我的脚步。",
+    "山川土石都听从我的意志。",
+    "饥饿，是我永恒的本能。",
+    "再坚硬的堡垒，也会被我碾碎。",
+    "曾经我坐拥无数山河土地。",
+    "封印关不住山之恶魔的力量。",
+    "敢于阻拦，就成为我的食粮。",
+    "大地震动，一切都将崩塌。",
+    "凡人兵器对我毫无伤害。",
+    "群山是我力量最好的源泉。",
+    "不要妄想用咒语彻底消灭我。",
+    "我可以吞食岩石建筑甚至魔法。",
+    "当我苏醒，大地为之颤抖。",
+    "弱小的生灵，只能任我摆布。",
+    "山石泥土，随我的心意而动。",
+    "漫长封印磨灭不了我的食欲。",
+    "所有阻挡我的，全部吞入腹中。",
+    "山峦巨人，不会向凡人屈服。",
+    "我将重新统治世间群山大地。"
+  ],
+  "啸风": [
+    "狂风呼啸，席卷世间万物。",
+    "大风会将你们全部卷走。",
+    "风的力量，无人可以抵挡。",
+    "我将吹散一切虚伪的光明。",
+    "小小的法术，困不住我的风暴。",
+    "整个世界，都要承受我的狂风。",
+    "不要妄想可以阻挡我的脚步。",
+    "风暴来临，你们无处可逃。",
+    "狂风可以掀翻堡垒摧毁城墙。",
+    "气流由我随心所欲的操控。",
+    "风暴过境，万物尽数被席卷。",
+    "凡人的躯体扛不住狂风之力。",
+    "我可以化作疾风穿梭天地间。",
+    "封印只能短暂困住风的力量。",
+    "狂风可以吹散魔法与咒语。",
+    "世间的风，全部遵从我的号令。",
+    "不要妄图建筑抵挡我的风暴。",
+    "狂风呼啸，便是我降临信号。",
+    "没有围墙可以隔绝我的大风。",
+    "我可以掀起毁天灭地的飓风。",
+    "渺小人类，怎敢对抗风暴恶魔。",
+    "就算被封印，狂风依旧咆哮。",
+    "气流可以撕碎一切阻拦之物。",
+    "当我归来，风暴席卷大地。",
+    "你的防御挡不住无形狂风。",
+    "疾风来去，没有人可以捕捉。",
+    "风不会被牢笼所禁锢束缚。",
+    "凡人咒语难以镇压风之力量。",
+    "狂风将清扫世间所有反抗者。",
+    "世间万风，皆归啸风掌控。"
+  ],
+  "中苏": [
+    "雷霆万钧，降下天罚。",
+    "雷电会惩罚所有反抗我的人。",
+    "闪电的力量，毁天灭地。",
+    "感受雷霆恶魔的怒火吧。",
+    "凡人，接受雷电的审判。",
+    "乌云密布，便是我的战场。",
+    "再强大的肉体，也扛不住闪电。",
+    "我将以雷霆重塑这个世界。",
+    "乌云汇聚，雷电听从我的召唤。",
+    "闪电可以击穿坚硬岩石钢铁。",
+    "违抗我者，必遭雷霆轰击。",
+    "雷电的威力足以毁灭一切城池。",
+    "乌云翻涌，宣告我的降临。",
+    "凡人肉体扛不住雷电的灼烧。",
+    "就算封印，雷电魔力不曾消散。",
+    "雷霆天罚，惩罚世间忤逆之人。",
+    "闪电瞬息之间便可以击中敌人。",
+    "不要妄想金属护盾抵挡雷电。",
+    "雷电恶魔，执掌天空霹雳。",
+    "乌云笼罩，大地等待雷霆审判。",
+    "再坚固铠甲也挡不住闪电。",
+    "我可以不断降下无尽霹雳。",
+    "渺小凡人，承受雷霆的怒火。",
+    "封印锁不住雷电本源力量。",
+    "电光一闪，敌人化为灰烬。",
+    "世间雷霆，都归中苏掌管。",
+    "敢反抗恶魔，就接受天罚。",
+    "乌云汇聚，霹雳即将落下。",
+    "没有凡人可以硬抗雷霆之力。",
+    "当我归来，大地雷电轰鸣。"
+  ],
+  "巴莎": [
+    "汪洋大海，听从我的召唤。",
+    "洪水淹没陆地，世间归我统治。",
+    "水流可以吞噬一切抵抗。",
+    "大海是我永恒的王国。",
+    "不要妄图和水的力量抗衡。",
+    "滔天巨浪，洗去世间的光明。",
+    "海水会埋葬所有反抗者。",
+    "封印阻挡不了我重回大海。",
+    "滔天洪水可以淹没城市村庄。",
+    "流水无孔不入，无处可躲藏。",
+    "大海的力量，无穷无尽。",
+    "巨浪可以击碎岸上的堡垒。",
+    "我可以操控江河湖海之水。",
+    "陆地终会被海水重新吞没。",
+    "就算封印，海水依旧听我号令。",
+    "凡人与水对抗，注定会失败。",
+    "洪水席卷，万物尽数淹没。",
+    "水可以渗透打破一切壁垒。",
+    "海洋是属于巴莎的辽阔疆域。",
+    "巨浪袭来，没有地方可以逃避。",
+    "不要妄想简单咒语镇压水魔。",
+    "我掀起海啸，摧毁岸上一切。",
+    "水流可以消磨坚固的岩石。",
+    "大海的怒火，凡人难以承受。",
+    "陆地生灵，畏惧水之恶魔。",
+    "海水可以淹没凡人所有文明。",
+    "封印只能暂时隔绝我与大海。",
+    "流水变幻，难以被牢笼困住。",
+    "反抗我的生灵，沉入海底。",
+    "终有一日大海将重新统治大地。"
+  ],
+  "地魁": [
+    "大地开裂，是我苏醒的预兆。",
+    "泥土岩石，全部服从我的意志。",
+    "大地之下，是我的无尽疆域。",
+    "地面会埋葬所有的敌人。",
+    "地壳震动，接受恶魔的力量。",
+    "土地的力量，无人能够抗衡。",
+    "渺小人类，不要妄想禁锢我。",
+    "我将从地底重回世间。",
+    "大地震裂，岩石破土而出。",
+    "我可以操控泥土沙石与岩层。",
+    "大地可以吞噬一切闯入者。",
+    "地壳震动，城池随之崩塌。",
+    "深埋地下，我的力量从未消散。",
+    "岩石构筑的躯体坚不可摧。",
+    "不要妄想地面牢笼困住地魁。",
+    "大地可以撕裂一切防御工事。",
+    "泥土沙石，随我的心意变化。",
+    "地下世界，本就是我的领地。",
+    "凡人建筑，挡不住大地力量。",
+    "地面裂开，敌人坠入深渊。",
+    "就算封印，土地依旧听我号令。",
+    "山石泥土，皆是我的武器。",
+    "大地的力量厚重而不可抵挡。",
+    "敢于忤逆，便埋葬于土层之下。",
+    "我可以掀起山崩，摧毁堡垒。",
+    "地下无尽疆域任我纵横。",
+    "凡人的法术难以镇压地之力。",
+    "地表万物，都依托我的大地。",
+    "岩层坚硬，如同恶魔的身躯。",
+    "挣脱封印，我将震动整片大地。"
+  ],
+  "西木": [
+    "长空万里，任由我翱翔。",
+    "天空属于我，谁也不能抢夺。",
+    "我可以化作微风，也化作狂风。",
+    "天空之中，没有人可以战胜我。",
+    "不要试图在天空和我较量。",
+    "云层之上，就是我的领地。",
+    "飞翔，是我与生俱来的权能。",
+    "我将把黑暗布满整片天空。",
+    "高空之中，我占据绝对优势。",
+    "我穿梭云层，来去自由无拘束。",
+    "翅膀掠过，掀起猛烈气流。",
+    "凡人很难捕捉天空之中的我。",
+    "天空广阔，任由我四处游走。",
+    "我可以化作阴影隐藏云层间。",
+    "封印困不住能够飞翔的恶魔。",
+    "高空之上，凡人兵器难以企及。",
+    "我能够自由变换身形大小。",
+    "天空是西木无边无际的王国。",
+    "不要妄想在高空阻拦我的行动。",
+    "云层遮蔽阳光，笼罩世间大地。",
+    "振翅之间，掀起阵阵狂风。",
+    "凡人难以追上我飞翔的速度。",
+    "就算被封印，飞翔本能不曾消失。",
+    "翱翔天际，没有牢笼可以禁锢。",
+    "我可以穿梭云雾，隐匿行踪。",
+    "地面生灵，仰望天空畏惧我。",
+    "空中作战，没有人是我的对手。",
+    "乌云蔽日，黑暗铺满整片苍穹。",
+    "长空万里，尽归西木掌控。",
+    "挣脱封印，重新翱翔于天地。"
+  ],
+  "恶魔小龙": [
+    "八大恶魔魔气，全部归我所有！",
+    "圣主，旧时代已经过去了。",
+    "这个世界，该由我来主宰。",
+    "魔气的力量，碾压所有凡人。",
+    "符咒早已比不上魔气的威力。",
+    "你们所有人，都阻挡不了我。",
+    "我的父亲，你已经过时了。",
+    "黑暗魔气，毁灭眼前的一切。",
+    "八大恶魔的魔气，蕴含无尽力量。",
+    "圣主的时代，彻底宣告终结。",
+    "集齐全部魔气，世间无人能敌。",
+    "符咒的力量，早已被魔气超越。",
+    "我才是新时代的恶魔统治者。",
+    "凡人的抵抗，只是徒劳挣扎。",
+    "父亲，你的格局太过狭隘。",
+    "魔气可以赐予我八大恶魔本领。",
+    "不要拿古老规则约束现在的我。",
+    "只要集齐魔气，我将重塑世界。",
+    "圣主，你该让位给你的后代。",
+    "所有反抗我的人都会被消灭。",
+    "魔气在体内奔涌，力量不断暴涨。",
+    "旧恶魔的时代，该画上句号。",
+    "十三区，阻止不了我的野心。",
+    "龙小组，你们的反抗毫无意义。",
+    "我不需要十二符咒，魔气更强。",
+    "我要把恶魔时代重新带回人间。",
+    "不要妄想用咒语驱散全部魔气。",
+    "就算是圣主，也不是我的对手。",
+    "世间万物，都要臣服于我脚下。",
+    "魔气加身，我将统治整个世界。"
+  ],
+  "寒冰": [
+    "恶魔小龙给了我们强大的力量。",
+    "尝尝寒气带来的绝望吧。",
+    "寒冰的力量，冻结所有敌人。",
+    "我们只为更强的一方效力。",
+    "不要小看获得魔气的我们。",
+    "冰冷，将封存你们的希望。",
+    "反抗小龙，就是与我们为敌。",
+    "冰霜之下，一切都会归于沉寂。",
+    "寒气可以冻结空气与水流。",
+    "魔气赋予我操控寒冰的能力。",
+    "冰冷会慢慢侵蚀你的躯体。",
+    "不要妄想靠近我的冰霜领域。",
+    "被寒冰冻结，你将动弹不得。",
+    "跟随恶魔小龙，获取强大力量。",
+    "寒冰可以冻结武器，封住行动。",
+    "温暖在我的冰霜面前不堪一击。",
+    "魔气改造我的身体，不惧严寒。",
+    "阻拦恶魔小龙，就会被冰封。",
+    "寒气可以冻结地面困住对手。",
+    "力量决定我们该追随谁。",
+    "冰霜覆盖之处，万物尽数冻结。",
+    "不要妄想火焰可以轻易化解寒冰。",
+    "我的寒气可以穿透坚硬铠甲。",
+    "只要完成任务，力量会继续增强。",
+    "寒冷会消磨敌人全部斗志。",
+    "敢于对抗我们，就接受冰封。",
+    "恶魔小龙会赐予我们更多魔力。",
+    "冰霜笼罩战场，对手无处逃跑。",
+    "凡人很难抵御魔气加持的寒冰。",
+    "寒冰之力，碾碎眼前的阻碍。"
+  ],
+  "拳师": [
+    "强化的拳头，可以击碎一切。",
+    "我的力量远超从前的自己。",
+    "硬碰硬，你们不会是对手。",
+    "魔气赋予我无可匹敌的蛮力。",
+    "乖乖认输，免受皮肉之苦。",
+    "敢阻拦我们，就挨我的重拳。",
+    "力量，就是解决一切的答案。",
+    "没有人可以接下我的全力一击。",
+    "拳头可以击碎岩石与钢铁。",
+    "魔气改造躯体，力量成倍暴涨。",
+    "不要妄想靠技巧抵消蛮力。",
+    "正面交战，没有人可以战胜我。",
+    "一拳就可以击溃你的防御。",
+    "听从恶魔小龙，获取强大力量。",
+    "你的身躯扛不住我的重拳。",
+    "坚硬墙壁，在我拳头下不堪一击。",
+    "不要妄想和我近身搏斗。",
+    "蛮力可以破除很多魔法屏障。",
+    "敢挡在我们前进道路上，就挨打。",
+    "力量才是生存世间最大资本。",
+    "我的拳头可以打飞一切敌人。",
+    "魔气带给我源源不断的体能。",
+    "不要侥幸，你的防御撑不住多久。",
+    "只要为小龙效力，力量源源不断。",
+    "硬碰硬对决，你注定会落败。",
+    "就算有护甲，也挡不住重拳。",
+    "拳头之下，诡计没有任何用处。",
+    "我不会浪费时间，直接击溃对手。",
+    "肉身力量，碾压凡人的武艺。",
+    "尝尝魔气强化之后的重拳。"
+  ],
+  "毒蛇": [
+    "毒素，会慢慢消磨你的生机。",
+    "不要靠近，我的毒无药可解。",
+    "毒液会侵蚀你的身体。",
+    "魔气放大了我的剧毒本领。",
+    "不要妄想躲过我的攻击。",
+    "中毒之后，你只能束手待毙。",
+    "和我作对，就要承受剧毒。",
+    "毒素将笼罩整个战场。",
+    "毒液沾染就会慢慢侵蚀躯体。",
+    "魔气加持，毒素威力大幅上涨。",
+    "一点点毒液，就足以放倒对手。",
+    "不要妄想简单解药化解我的毒。",
+    "毒液可以附着在武器之上。",
+    "轻微划伤，就会中毒受创。",
+    "听从恶魔小龙，释放我的剧毒。",
+    "毒素会麻痹你的四肢与神经。",
+    "不要靠近我的攻击范围之内。",
+    "毒液可以腐蚀普通防具。",
+    "中毒之后，力量会不断衰弱。",
+    "我的毒素，是最隐蔽的武器。",
+    "就算躲开正面，也要提防毒雾。",
+    "魔气让我的毒素变得更加致命。",
+    "不要觉得不被咬伤就可以安全。",
+    "战场之上，毒素会四处弥漫。",
+    "反抗小龙，就体会剧毒折磨。",
+    "毒素无声无息，难以提前察觉。",
+    "一旦中毒，战斗便已经结束。",
+    "毒液可以从缝隙渗透铠甲。",
+    "我擅长用毒素悄悄解决敌人。",
+    "剧毒笼罩，你的结局早已注定。"
+  ]
+};
+
+/* 宿命专属配对台词池（优先触发，用完后调取通用库） */
+const FATED_DIALOGUES = {
+  "龙叔-圣主": {
+    used: [],
+    lines: [
+      {a:"圣主你好，你应该回地狱去。", b:"成龙，我们终于又见面了呀。"},
+      {a:"圣主，没想到又见面了。", b:"小玉怎么没来帮你？"},
+      {a:"恶魔统治人间的日子结束了。", b:"黑暗终将笼罩大地，你该认输了。"},
+      {a:"我不会让你得逞的，圣主。", b:"我现在什么都不缺了。"},
+      {a:"圣主，正义终将战胜邪恶。", b:"成龙，符咒的力量该还回来了。"}
+    ]
+  }
+};
+
+/* 龙叔×圣主 相遇对话模式：双方同时在场时，随机间隔互相对话 */
+/* ========== 通用对战对话系统 ==========
+ * 双人同时存活，7秒随机触发窗口，文字显示3秒，CD冷却10秒
+ * A触发说话，B随机抽取自身库回复
+ * 优先触发宿命专属配对台词，专属用完再调取30条通用后台库
+ * 魔气属于状态，没有对话数据；黑影兵团小兵不启用对话
+ */
+var _battleDialog = { nextTime: 0, active: false, lastSpeaker: null };
+
+function tickBattleDialog(dt){
+  try{
+    if(!battle || battle.over || !_physics) return;
+    var cs = _physics.circles || [];
+    if(cs.length < 2) return;
+    
+    // 找出双方存活且有台词库的角色
+    var sideA = null, sideB = null;
+    for(var i=0;i<cs.length;i++){
+      var c = cs[i];
+      if(!c.unit || !c.unit.alive) continue;
+      var nm = c.unit.member ? c.unit.member.n : (c.unit.nm||'');
+      if(DIALOGUE_LIBRARY[nm]){
+        if(c.side === 'you' && !sideA) sideA = {circle:c, name:nm};
+        if(c.side === 'foe' && !sideB) sideB = {circle:c, name:nm};
+      }
+    }
+    if(!sideA || !sideB) return;
+    
+    // 时间管理：7秒触发窗口 + 10秒CD
+    _battleDialog.nextTime = Math.max(0, _battleDialog.nextTime - dt);
+    if(_battleDialog.nextTime > 0 || _battleDialog.active) return;
+    
+    // 触发对话
+    _battleDialog.active = true;
+    
+    // 决定谁先说话（随机，避免总是同一方）
+    var speaker, listener;
+    if(Math.random() < 0.5){
+      speaker = sideA; listener = sideB;
+    } else {
+      speaker = sideB; listener = sideA;
+    }
+    
+    // 检查宿命专属配对台词
+    var pairKey1 = speaker.name + '-' + listener.name;
+    var pairKey2 = listener.name + '-' + speaker.name;
+    var fatedPool = FATED_DIALOGUES[pairKey1] || FATED_DIALOGUES[pairKey2];
+    var speakerText = '', listenerText = '';
+    var usedFated = false;
+    
+    if(fatedPool && fatedPool.used.length < fatedPool.lines.length){
+      var available = [];
+      for(var fi=0; fi<fatedPool.lines.length; fi++){
+        if(fatedPool.used.indexOf(fi) === -1) available.push(fi);
+      }
+      if(available.length > 0){
+        var idx = available[Math.floor(Math.random()*available.length)];
+        fatedPool.used.push(idx);
+        var line = fatedPool.lines[idx];
+        if(FATED_DIALOGUES[pairKey1]){
+          speakerText = line.a; listenerText = line.b;
+        } else {
+          speakerText = line.b; listenerText = line.a;
+        }
+        usedFated = true;
+      }
+    }
+    
+    // 专属用完，调取通用后台库
+    if(!usedFated){
+      var spkLib = DIALOGUE_LIBRARY[speaker.name];
+      var lstLib = DIALOGUE_LIBRARY[listener.name];
+      speakerText = spkLib[Math.floor(Math.random()*spkLib.length)];
+      listenerText = lstLib[Math.floor(Math.random()*lstLib.length)];
+    }
+    
+    // 显示说话者对话框
+    var spkKind = speaker.circle.side === 'you' ? 'self' : 'foe';
+    showSkillDialog(speaker.circle, speakerText, spkKind);
+    
+    // 0.3秒后显示回复者对话框
+    var lstKind = listener.circle.side === 'you' ? 'self' : 'foe';
+    (function(lstCircle, lstText, lstKind){
+      setTimeout(function(){
+        try{ showSkillDialog(lstCircle, lstText, lstKind); }catch(_){}
+      }, 300);
+    })(listener.circle, listenerText, lstKind);
+    
+    // 3秒显示 + 10秒CD + 7秒随机窗口 = 下次触发时间
+    _battleDialog.nextTime = 3*60 + 10*60 + Math.floor(Math.random()*7*60);
+    setTimeout(function(){ _battleDialog.active = false; }, 3000);
+    
+  }catch(e){}
+}
+
 
 /* 根据技能名称/描述推断特效类别，未命中默认 by type；6 类：fire/thunder/wind/water/dark/light
    额外元素关键词也分配到 6 大类，确保每次攻击"可视化、形状不同" */
@@ -4306,6 +5634,123 @@ function guessSkillFx(sk){
   return 'light';
 }
 
+/* 技能对话框：在球体头上显示漫画风格对话框，持续3秒后自动消失 */
+/* ========== 角色语音播报系统 ==========
+ * 根据角色性别、年龄、性格特征使用不同音色
+ * 使用Web Speech API SpeechSynthesis
+ */
+const ROLE_VOICE_CONFIG = {
+  // 龙小组阵营
+  "龙叔":   {pitch:0.9, rate:1.0, volume:1.0, lang:"zh-CN"},  // 成年男性，沉稳
+  "小玉":   {pitch:1.7, rate:1.2, volume:1.0, lang:"zh-CN"},  // 小女孩，活泼
+  "老爹":   {pitch:0.7, rate:0.75,volume:1.0, lang:"zh-CN"},  // 老年男性，缓慢
+  "特鲁":   {pitch:0.75,rate:0.85,volume:1.0, lang:"zh-CN"},  // 成年男性，憨厚
+  "牛战士": {pitch:0.85,rate:0.95,volume:1.0, lang:"zh-CN"},  // 成年男性，有力
+  "小蛇":   {pitch:1.3, rate:1.1, volume:1.0, lang:"zh-CN"},  // 成年女性，灵巧
+  "布莱克": {pitch:1.0, rate:1.0, volume:1.0, lang:"zh-CN"},  // 成年男性，正式
+  // 黑手帮阵营
+  "瓦龙":   {pitch:1.1, rate:1.0, volume:1.0, lang:"zh-CN"},  // 成年男性，傲慢
+  "黑虎阿福":{pitch:1.0, rate:1.15,volume:1.0, lang:"zh-CN"}, // 成年男性，激昂
+  "阿奋":   {pitch:1.0, rate:0.85,volume:1.0, lang:"zh-CN"},  // 成年男性，抱怨
+  "拉苏":   {pitch:0.8, rate:0.8, volume:1.0, lang:"zh-CN"},  // 成年男性，迟钝
+  "周":     {pitch:1.0, rate:1.0, volume:1.0, lang:"zh-CN"},  // 成年男性，冷酷
+  // 刀龙阵营
+  "刀龙":   {pitch:0.75,rate:0.8, volume:1.0, lang:"zh-CN"},  // 成年男性，神秘
+  "塔拉":   {pitch:0.65,rate:0.75,volume:1.0, lang:"zh-CN"},  // 中性，威严
+  // 八大恶魔阵营
+  "圣主":   {pitch:0.6, rate:0.8, volume:1.0, lang:"zh-CN"},  // 成年男性，威严低沉
+  "咒蓝":   {pitch:0.7, rate:0.75,volume:1.0, lang:"zh-CN"},  // 成年男性，神秘缓慢
+  "波刚":   {pitch:0.7, rate:0.7, volume:1.0, lang:"zh-CN"},  // 中性，粗重缓慢
+  "啸风":   {pitch:1.0, rate:1.15,volume:1.0, lang:"zh-CN"},  // 成年男性，轻快
+  "中苏":   {pitch:0.85,rate:0.95,volume:1.0, lang:"zh-CN"},  // 成年男性，威严
+  "巴莎":   {pitch:1.2, rate:0.95,volume:1.0, lang:"zh-CN"},  // 成年女性，优雅
+  "地魁":   {pitch:0.65,rate:0.75,volume:1.0, lang:"zh-CN"},  // 成年男性，厚重
+  "西木":   {pitch:1.3, rate:1.15,volume:1.0, lang:"zh-CN"},  // 少年男性，狡黠
+  // 魔气阵营
+  "恶魔小龙":{pitch:1.2, rate:1.1, volume:1.0, lang:"zh-CN"}, // 少年男性，叛逆
+  "寒冰":   {pitch:0.9, rate:0.95,volume:1.0, lang:"zh-CN"},  // 成年男性，冷酷
+  "拳师":   {pitch:0.75,rate:0.85,volume:1.0, lang:"zh-CN"},  // 成年男性，粗壮
+  "毒蛇":   {pitch:1.25,rate:0.9, volume:1.0, lang:"zh-CN"}   // 成年女性，阴险
+};
+
+// 语音播报队列（避免重叠）
+var _speechQueue = [];
+var _speaking = false;
+
+function speakDialog(text, roleName){
+  try{
+    if(!text || !window.speechSynthesis) return;
+    var cfg = ROLE_VOICE_CONFIG[roleName] || {pitch:1.0, rate:1.0, volume:1.0, lang:"zh-CN"};
+    // 加入队列
+    _speechQueue.push({text:text, cfg:cfg});
+    processSpeechQueue();
+  }catch(e){}
+}
+
+function processSpeechQueue(){
+  try{
+    if(_speaking || _speechQueue.length === 0) return;
+    if(!window.speechSynthesis) return;
+    _speaking = true;
+    var item = _speechQueue.shift();
+    var utter = new SpeechSynthesisUtterance(item.text);
+    utter.pitch = item.cfg.pitch;
+    utter.rate = item.cfg.rate;
+    utter.volume = item.cfg.volume;
+    utter.lang = item.cfg.lang || 'zh-CN';
+    // 尝试选择中文语音
+    var voices = window.speechSynthesis.getVoices();
+    var zhVoice = voices.find(function(v){ return v.lang && v.lang.indexOf('zh') >= 0; });
+    if(zhVoice) utter.voice = zhVoice;
+    utter.onend = function(){ _speaking = false; processSpeechQueue(); };
+    utter.onerror = function(){ _speaking = false; processSpeechQueue(); };
+    window.speechSynthesis.speak(utter);
+  }catch(e){ _speaking = false; }
+}
+
+// 预加载语音列表
+if(window.speechSynthesis){
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.onvoiceschanged = function(){ window.speechSynthesis.getVoices(); };
+}
+
+function showSkillDialog(circle, text, kind){
+  if(!circle || !circle.el) return;
+  var arena = document.getElementById('arena');
+  if(!arena) return;
+  // 语音播报：获取角色名称并播报台词
+  try{
+    var roleName = '';
+    if(circle.unit && circle.unit.member) roleName = circle.unit.member.n;
+    else if(circle.unit && circle.unit.nm) roleName = circle.unit.nm;
+    if(roleName) speakDialog(text, roleName);
+  }catch(_){}
+  // 移除同类型旧对话框
+  var old = arena.querySelector('.skill-dialog-' + (circle.side||'x'));
+  if(old && old.parentNode) old.parentNode.removeChild(old);
+  var dlg = document.createElement('div');
+  dlg.className = 'skill-dialog skill-dialog-' + (circle.side||'x');
+  dlg.innerHTML = '<span>' + text + '</span><i></i>';
+  if(kind==='foe') dlg.classList.add('foe-dlg');
+  arena.appendChild(dlg);
+  // 定位到球体上方
+  function updatePos(){
+    if(!dlg.parentNode) return;
+    var r = circle.r || 18;
+    dlg.style.left = (circle.x - 60) + 'px';
+    dlg.style.top = (circle.y - r - 42) + 'px';
+    requestAnimationFrame(updatePos);
+  }
+  updatePos();
+  // 3秒后淡出消失
+  setTimeout(function(){
+    dlg.style.transition = 'opacity .5s ease, transform .5s ease';
+    dlg.style.opacity = '0';
+    dlg.style.transform = 'translateY(-8px)';
+    setTimeout(function(){ if(dlg.parentNode) dlg.parentNode.removeChild(dlg); }, 500);
+  }, 3000);
+}
+
 /* 按技能类型处理命中效果：攻击→打对方，回血→治自己，防御/辅助→加 buff 或加防 */
 function doSkillTickEffect(c){
   try{
@@ -4321,6 +5766,38 @@ function doSkillTickEffect(c){
     var sd = (sk.nm||'')+' '+(sk.desc||'');
     var isHeal = (t==='heal'||t==='sup'||t==='buff'||/治愈|回血|回春|恢复|治疗|生机|补气|养气|护主|护体/.test(sd));
     var isDef  = (t==='def'||/格挡|护体|护甲|防御|盾|守护|守|禅|稳/.test(sd));
+    var isUlt  = (t==='ult'||/倒霉/.test(sd));
+    // ⭐ 终极技：龙叔·倒霉倒霉倒霉 —— 冻结敌人3秒 + 自身速度4倍/血量4倍/攻击2倍
+    if(isUlt){
+      if(c.side && _bss && _bss[c.side]){
+        var st = _bss[c.side];
+        // 自身增益：速度2倍、攻击3倍、防御2倍（伤害减半），持续10秒
+        st.spdMul = 2.0; st.spdMulUntil = 10*60;
+        st.atkMul = 3.0; st.atkMulUntil = 10*60;
+        st.defMul = 0.5; st.defMulUntil = 10*60;
+        // 自身血量4倍：临时提升maxHp和hp，10秒后还原
+        if(c.unit && !c.unit._ultHpBoosted){
+          c.unit._ultHpBoosted = true;
+          c.unit._ultOrigMaxHp = c.unit.maxHp || c.unit.max || 100;
+          var newMax = c.unit._ultOrigMaxHp * 4;
+          c.unit.maxHp = newMax; c.unit.max = newMax;
+          c.unit.hp = Math.min(newMax, (c.unit.hp||0) * 4);
+          c.unit._ultHpUntil = 10*60;
+          renderUnitRows();
+        }
+      }
+      // 冻结敌人3秒
+      if(other && other.side && _bss && _bss[other.side]){
+        _bss[other.side].freezeUntil = Math.max(_bss[other.side].freezeUntil, 3*60);
+      }
+      // 对话框效果
+      try{ showSkillDialog(c, '倒霉倒霉倒霉！', 'self'); }catch(_){}
+      try{ if(other) showSkillDialog(other, '他简直是个超人', 'foe'); }catch(_){}
+      // 技能轨迹特效
+      try{ spawnSkillFx(c, 'light', true); }catch(_){}
+      beep(880); setTimeout(function(){beep(1100);},100); setTimeout(function(){beep(1320);},200);
+      return;
+    }
     // 攻击/伤害类：对对方造成额外伤害
     if(!isHeal && !isDef){
       // ⚠ 伤害按"慢战斗"约束：单技能段不超过 ATK 的 0.55 并加小随机
@@ -4331,7 +5808,7 @@ function doSkillTickEffect(c){
       if(other && other.side){
         hit(other.side, dmg, c.side);
         // 命中闪白
-        if(other.el){ other.el.classList.remove('hit-flash'); void other.el.offsetWidth; other.el.classList.add('hit-flash'); }
+        if(other.el){ var _now2=Date.now(); if(!other.el._lastHitFlash || _now2-other.el._lastHitFlash>600){ other.el._lastHitFlash=_now2; other.el.classList.remove('hit-flash'); void other.el.offsetWidth; other.el.classList.add('hit-flash'); } }
       }
     } else if(isHeal){
       var h = Math.max(1, Math.round( baseHeal*(0.75+Math.random()*0.35) ));
@@ -4704,6 +6181,9 @@ function startBattle(youArr,foeArr){
   // 道具：八大恶魔之力 + 八仙武器 + 十二符咒 + 特殊道具
   buildItems(); buildImmortalItems(); buildTalismanGrid(); buildSpecialItems(); bindItemCats(); switchItemCat('talisman');
   document.getElementById('resultBanner').classList.remove('show');
+  // ===== 十二符咒 · 被动buff：读取主页激活的符咒，应用到我方所有单位 =====
+  try{ applyTalismanPassives('you'); }catch(e){ console.error('applyTalismanPassives',e); }
+  renderUnitRows();  // 被动buff可能修改maxHp/atk，重新渲染
   initPhysics();
 }
 /* 渲染对战框上/下的三联排单位卡片：敌方 3 个在正方形上方，我方 3 个在正方形下方 */
@@ -4752,26 +6232,120 @@ function renderUnitRows(){
 
 function hit(target,dmg,attacker){
   if(!battle||battle.over) return;
-  // BSS：攻击力倍率 / 压 1 / HP 锁
+  const list = target==='you'?battle.you:battle.foe;
+  const idx  = target==='you'?battle.yi:battle.fi;
+  if(!list[idx] || !list[idx].alive) return;
+
+  // ===== 十二符咒 · 目标方无敌状态：隐身 / 灵魂出窍 =====
+  if(bssInvis(target)){
+    try{ const cl=document.getElementById('clash'); if(cl){ cl.textContent='👻隐身·未命中'; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); } }catch(_){}
+    beep(attacker==='you'?1080:520);
+    return;
+  }
+  if(bssSoul(target)){
+    try{ const cl=document.getElementById('clash'); if(cl){ cl.textContent='✦灵魂·无敌'; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); } }catch(_){}
+    beep(attacker==='you'?1080:520);
+    return;
+  }
+
+  // BSS：攻击力倍率 / 压 1
   if(attacker){ dmg = bssAtkMul(attacker, dmg); }
+
+  // ===== 十二符咒 · 攻击方被动：龙焰附加伤害 / 猪镭射追击 =====
+  var extraDmg = 0;
+  if(attacker){
+    var aPc = findPhysBySide(attacker);
+    var aUnit = aPc ? aPc.unit : null;
+    if(aUnit){
+      if(aUnit._passiveFireBonus && aUnit._passiveFireBonus>0){
+        extraDmg += Math.round(dmg * aUnit._passiveFireBonus);
+      }
+      if(aUnit._passiveLaserChance && aUnit._passiveLaserChance>0 && Math.random()<aUnit._passiveLaserChance){
+        extraDmg += 12;
+        try{ const cl2=document.getElementById('clash'); if(cl2){ cl2.textContent='⚡镭射+12'; cl2.classList.remove('show'); void cl2.offsetWidth; cl2.classList.add('show'); } }catch(_){}
+      }
+    }
+  }
+  dmg += extraDmg;
+
+  // HP锁（狗符咒主动 / 岁月史书）
   if(bssHpLock(target)){
-    // HP 被锁定 -> 不掉血，视觉上给个 "LOCK" 文本
     try{
-      const cl=document.getElementById('clash'); if(cl){ cl.textContent='LOCK'; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); }
+      const cl=document.getElementById('clash'); if(cl){ cl.textContent='🔒LOCK'; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); }
     }catch(_){}
     beep(attacker==='you'?1080:520);
     return;
   }
-  const list = target==='you'?battle.you:battle.foe;
-  const idx  = target==='you'?battle.yi:battle.fi;
+
+  // ===== 十二符咒 · 目标方被动：闪避判定（蛇+猴）=====
+  if(bssDodgeRoll(target)){
+    try{ const cl=document.getElementById('clash'); if(cl){ cl.textContent='💨闪避'; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); } }catch(_){}
+    beep(attacker==='you'?1080:520);
+    return;
+  }
+
+  // ===== 十二符咒 · 目标方伤害减免：鸡被动 / 虎主动阴阳平衡 / 龙叔终极技防御倍率 =====
+  dmg = bssDmgReduce(target, dmg);
+  var tSt = _bss && _bss[target];
+  if(tSt && tSt._tigerBalance && tSt._tigerBalanceUntil>0){
+    dmg = Math.max(1, Math.round(dmg * tSt._tigerBalance));
+  }
+  if(tSt && tSt.defMulUntil>0 && tSt.defMul!==undefined){
+    dmg = Math.max(1, Math.round(dmg * tSt.defMul));
+  }
+
+  // ===== 十二符咒 · 目标方被动：虎符咒·致命伤害1HP存活（每场限1次）=====
+  var tUnit = list[idx];
+  if(tUnit._passiveTigerBalance && !tUnit._tigerUsed && (tUnit.hp - dmg) <= 0){
+    tUnit._tigerUsed = true;
+    tUnit.hp = 1;
+    // 获得5秒攻击×1.5的愤怒状态
+    if(_bss && _bss[target]){
+      var oldMul = _bss[target].atkMul || 1.0;
+      _bss[target].atkMul = Math.max(oldMul, 1.5);
+      _bss[target].atkMulUntil = Math.max(_bss[target].atkMulUntil, 5*60);
+    }
+    try{ const cl=document.getElementById('clash'); if(cl){ cl.textContent='☯虎·阴阳逆转·1HP存活'; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); } }catch(_){}
+    beep(660); setTimeout(function(){beep(880);},100);
+    renderUnitRows();
+    return;
+  }
+
+  // ===== 十二符咒 · 目标方被动：羊符咒·灵魂护体（首次阵亡恢复15%HP+4秒无敌）=====
+  if(tUnit._passiveSheepSoul && !tUnit._sheepUsed && (tUnit.hp - dmg) <= 0){
+    tUnit._sheepUsed = true;
+    var mx = tUnit.maxHp || tUnit.max || 100;
+    tUnit.hp = Math.round(mx * 0.15);
+    if(_bss && _bss[target]){
+      _bss[target].soulUntil = Math.max(_bss[target].soulUntil, 4*60);
+    }
+    try{ const cl=document.getElementById('clash'); if(cl){ cl.textContent='🐑羊·灵魂出窍·15%HP+4s无敌'; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); } }catch(_){}
+    beep(660); setTimeout(function(){beep(880);},100);
+    renderUnitRows();
+    return;
+  }
+
+  // 正常扣血
   list[idx].hp=Math.max(0,list[idx].hp-dmg);
-  // 命中数字特效（物理弹球引擎已负责碰撞视觉特效）
+  // 命中数字特效
   const cl=document.getElementById('clash'); if(cl){ cl.textContent='-'+dmg; cl.classList.remove('show'); void cl.offsetWidth; cl.classList.add('show'); }
   beep(attacker==='you'?820:300);
-  // 上/下三联排血条刷新（每条独立）
   renderUnitRows();
+
   // 该角色阵亡 → 替补
   if(list[idx].hp<=0){
+    // ===== 十二符咒 · 目标方被动：鼠符咒·首次阵亡自动复活30%HP =====
+    if(tUnit._passiveRevive && !tUnit._reviveUsed){
+      tUnit._reviveUsed = true;
+      var mx2 = tUnit.maxHp || tUnit.max || 100;
+      tUnit.hp = Math.round(mx2 * 0.30);
+      tUnit.alive = true;
+      try{ const cl3=document.getElementById('clash'); if(cl3){ cl3.textContent='🐭鼠·生命复苏·30%HP'; cl3.classList.remove('show'); void cl3.offsetWidth; cl3.classList.add('show'); } }catch(_){}
+      beep(660); setTimeout(function(){beep(880);},100); setTimeout(function(){beep(1100);},200);
+      renderUnitRows();
+      return;
+    }
+
     list[idx].alive=false;
     if(target==='you'){
       battle.yi=battle.you.findIndex(x=>x.alive);
@@ -5004,6 +6578,17 @@ function onPlayerUseProp(srcEl){
     if(!info) return;
     // 全局道具 15s CD
     setPropGlobalCD(15);
+    // ===== 十二符咒 · 主动技能：如果是符咒类别，触发独特效果 =====
+    if(_activeItemCat==='talisman' && srcEl && srcEl.dataset && srcEl.dataset.idx!==undefined){
+      var tIdx = parseInt(srcEl.dataset.idx, 10);
+      if(!isNaN(tIdx) && tIdx>=0 && tIdx<12){
+        activateTalismanSkill(tIdx, 'you');
+        // 飞字视觉效果（快速飞到球体作为反馈）
+        flyPropToPhys(srcEl, 'you', info, function(ok){ /* 静默 */ });
+        _foePropReply_dt = 3*60;
+        return;
+      }
+    }
     // 飞行字 → 我方球体
     flyPropToPhys(srcEl, 'you', info, function(ok){ /* 静默 */ });
     beep(780); setTimeout(function(){beep(980);},120);
@@ -5040,6 +6625,16 @@ function fireFoeRandomProp(){
       try{ applyHistoryBookOption(hbPick, src, 'foe'); }catch(_){ flyPropToPhys(src,'foe',info); }
       beep(460); setTimeout(function(){beep(340);},120);
       return;
+    }
+    // ===== 十二符咒 · 敌方AI使用符咒时触发主动技能 =====
+    if(src && src.dataset && src.dataset.idx!==undefined){
+      var foeTIdx = parseInt(src.dataset.idx, 10);
+      if(!isNaN(foeTIdx) && foeTIdx>=0 && foeTIdx<12){
+        activateTalismanSkill(foeTIdx, 'foe');
+        flyPropToPhys(src, 'foe', info);
+        beep(460); setTimeout(function(){beep(340);},120);
+        return;
+      }
     }
     // 气魔法卷轴 / 剧情道具 / 潘库宝盒 / 未知道具 / 其它普通道具 → 走常规"飞字到敌球"
     flyPropToPhys(src, 'foe', info);
@@ -5114,8 +6709,9 @@ function buildTalismanGrid(){
   try{
     const root=document.getElementById('talismanGrid'); if(!root) return;
     root.innerHTML='';
-    TALISMANS.forEach(t=>{
+    TALISMANS.forEach((t,idx)=>{
       const el=document.createElement('div'); el.className='talisman-cell';
+      el.dataset.idx=idx;
       el.innerHTML='<div class="t-zodiac">'+t.zodiac+'</div><div class="t-name">'+t.name+'</div>';
       el.addEventListener('click',()=>onPlayerUseProp(el));
       root.appendChild(el);
