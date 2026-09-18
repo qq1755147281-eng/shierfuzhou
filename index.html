@@ -4454,7 +4454,7 @@ function physStep(dt){
     var c=cs[i];
     // ⭐ BSS 冻结：跳过位移&墙壁反弹（原地静止）
     if(bssFreeze(c.side)){
-      c.el.style.transform='translate('+(c.x-c.r)+'px,'+(c.y-c.r)+'px)';
+      if(c.el) c.el.style.transform='translate('+(c.x-c.r)+'px,'+(c.y-c.r)+'px)';
       continue;
     }
     c.x+=c.vx*dt; c.y+=c.vy*dt;
@@ -4481,7 +4481,7 @@ function physStep(dt){
         _dmgCD[c.side]=60; // ≈ 1.8s 无敌帧（撞墙伤频率严格控制）
       }
     }
-    c.el.style.transform='translate('+(c.x-c.r)+'px,'+(c.y-c.r)+'px)';
+    if(c.el) c.el.style.transform='translate('+(c.x-c.r)+'px,'+(c.y-c.r)+'px)';
   }
 
   // ==== 3) 球与球反弹：物理反弹为主 + 小随机偏转（模拟真实打斗"撞到后随机弹开"）====
@@ -5586,17 +5586,17 @@ function tickBattleDialog(dt){
     var spkKind = speaker.circle.side === 'you' ? 'self' : 'foe';
     showSkillDialog(speaker.circle, speakerText, spkKind);
     
-    // 0.3秒后显示回复者对话框
+    // 0.3秒后显示回复者对话框（战斗结束则取消）
     var lstKind = listener.circle.side === 'you' ? 'self' : 'foe';
     (function(lstCircle, lstText, lstKind){
       setTimeout(function(){
-        try{ showSkillDialog(lstCircle, lstText, lstKind); }catch(_){}
+        try{ if(battle && !battle.over) showSkillDialog(lstCircle, lstText, lstKind); }catch(_){}
       }, 300);
     })(listener.circle, listenerText, lstKind);
     
     // 3秒显示 + 10秒CD + 7秒随机窗口 = 下次触发时间
     _battleDialog.nextTime = 3*60 + 10*60 + Math.floor(Math.random()*7*60);
-    setTimeout(function(){ _battleDialog.active = false; }, 3000);
+    setTimeout(function(){ try{ _battleDialog.active = false; }catch(_){} }, 3000);
     
   }catch(e){}
 }
@@ -5733,17 +5733,19 @@ function showSkillDialog(circle, text, kind){
   dlg.innerHTML = '<span>' + text + '</span><i></i>';
   if(kind==='foe') dlg.classList.add('foe-dlg');
   arena.appendChild(dlg);
-  // 定位到球体上方
+  // 定位到球体上方（使用rAF并在对话框移除后取消循环）
+  var rafId = null;
   function updatePos(){
-    if(!dlg.parentNode) return;
+    if(!dlg.parentNode){ if(rafId) cancelAnimationFrame(rafId); return; }
     var r = circle.r || 18;
     dlg.style.left = (circle.x - 60) + 'px';
     dlg.style.top = (circle.y - r - 42) + 'px';
-    requestAnimationFrame(updatePos);
+    rafId = requestAnimationFrame(updatePos);
   }
   updatePos();
   // 3秒后淡出消失
   setTimeout(function(){
+    if(rafId) cancelAnimationFrame(rafId);
     dlg.style.transition = 'opacity .5s ease, transform .5s ease';
     dlg.style.opacity = '0';
     dlg.style.transform = 'translateY(-8px)';
@@ -6131,6 +6133,14 @@ function startBattle(youArr,foeArr){
   resetSkillStatus();
   // ⭐ BSS 战斗侧状态：每次新战斗强制从零开始（清 until/快照/残留 DOM/技能借用）
   resetBSS();
+  // ⭐ 对话系统重置：清空状态、宿命台词已用记录、语音队列
+  try{
+    _battleDialog.nextTime = 0;
+    _battleDialog.active = false;
+    for(var _fk in FATED_DIALOGUES){ if(FATED_DIALOGUES[_fk]) FATED_DIALOGUES[_fk].used = []; }
+    _speechQueue = [];
+    if(window.speechSynthesis) window.speechSynthesis.cancel();
+  }catch(_){}
   const n=[count(youArr),count(foeArr)];
   // ⚠ BUG FIX: 保存 origin 时必须深拷贝，避免 you/foe 原始成员对象被 assignCharAttrs 就地修改
   // （否则重开时所有单位 HP=原HP最后值、被原地写过属性，无法真正回到"满血初始"）
@@ -6371,6 +6381,18 @@ function endBattle(foeDead){
   resetPropSystem();
   // ⭐ 战斗结束：清空 BSS（旋转字/乱跳字/所有 until/快照/技能借用），避免下一局残留效果
   resetBSS();
+  // ⭐ 战斗结束：清空对话状态和语音队列，避免残留
+  try{
+    _battleDialog.active = false;
+    _speechQueue = [];
+    if(window.speechSynthesis) window.speechSynthesis.cancel();
+    // 清理残留对话框DOM
+    var arena = document.getElementById('arena');
+    if(arena){
+      var dlgRemain = arena.querySelectorAll('.skill-dialog');
+      for(var di=0; di<dlgRemain.length; di++){ if(dlgRemain[di].parentNode) dlgRemain[di].parentNode.removeChild(dlgRemain[di]); }
+    }
+  }catch(_){}
   const b=document.getElementById('resultBanner');
   var rtEl=document.getElementById('rt'), rsEl=document.getElementById('rs');
   if(foeDead){
@@ -6680,7 +6702,6 @@ function buildItems(){
     root.appendChild(el);
   });
 }
-function useItem(idx,el){ onPlayerUseProp(el||document.querySelector('#items .item[data-idx="'+idx+'"]')); }
 /* 八仙神明武器数据 */
 const IMMORTAL_ITEMS=[
   {n:'纯阳宝剑',el:'剑',desc:'吕洞宾·封圣主火'},
@@ -7032,19 +7053,7 @@ function bindItemCats(){
     });
   }catch(e){ console.error('bindItemCats',e); }
 }
-function useItem(idx,el){
-  if(!battle||battle.over||battle.paused||el.classList.contains('cool')) return;
-  const it=ITEMS[idx];
-  hit('foe',it.dmg,'you');
-  // 冷却
-  el.classList.add('cool'); let cd=1.5;
-  const overlay=document.createElement('div'); overlay.className='cd'; overlay.textContent='1.5'; el.appendChild(overlay);
-  const iv=setInterval(()=>{
-    cd-=0.1; if(cd<=0){clearInterval(iv);el.classList.remove('cool');overlay.remove();}
-    else overlay.textContent=cd.toFixed(1);
-  },100);
-  toast(`${it.n} · ${it.desc}`);
-}
+
 /* 战斗控制（幂等：避免重复进入战斗页叠加监听器） */
 let _bindBattleDone=false;
 function bindBattleControls(){
@@ -7117,7 +7126,7 @@ function bindToastAndBeep(){
 function toast(msg){
   try{
     if(!toastEl) toastEl=document.getElementById('toast');
-    if(!toastEl){ console.log('[TOAST]',msg); return; }
+    if(!toastEl){ return; }
     toastEl.textContent=msg;
     toastEl.classList.add('show');
     clearTimeout(toastT);
@@ -7343,7 +7352,7 @@ function bootGame(){
 
     phase='done';
     try{ toast('十二符咒·八卦奇门 · 已唤醒'); }catch(_){}
-    console.log('[bootGame] OK');
+    
     /* 11. 所有按钮点击自检：DOM 存在 + window.fn 可调用 + 监听器回调可达，失败红标展示 */
     try{ setTimeout(function(){ runButtonAudit(); },480); }catch(_){}
   }catch(err){
@@ -7425,7 +7434,7 @@ function runButtonAudit(){
 
     if(failures.length===0){
       try{ toast('按钮自检通过·共 '+need.length+' 项 / '+fns.length+' 函数'); }catch(_){}
-      console.log('[runButtonAudit] PASS', need.length, 'ui +', fns.length, 'fn');
+      
     }else{
       const head=`按钮自检 ${failures.length} 项失败：`;
       const msg=head+failures.slice(0,3).join('；')+(failures.length>3?' 等'+failures.length+' 条':'');
